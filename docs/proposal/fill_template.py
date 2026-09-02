@@ -338,16 +338,16 @@ def set_text(paragraph, text, *, bold=None, italic=False, size=SIZE):
 def add_page_numbering(doc):
     """Top-right page numbers, roman for front matter, arabic from Chapter 1."""
     def header_number(section, show=True):
-        # the number sits centred in the footer; any header is left empty
-        section.header.is_linked_to_previous = False
-        hp = section.header.paragraphs[0]
-        fmt(hp, double=False, first_line=Inches(0))
-        for r in list(hp.runs):
+        # top right corner, as the template requires; the footer stays empty
+        section.footer.is_linked_to_previous = False
+        fp = section.footer.paragraphs[0]
+        fmt(fp, double=False, first_line=Inches(0))
+        for r in list(fp.runs):
             r._element.getparent().remove(r._element)
 
-        section.footer.is_linked_to_previous = False
-        p = section.footer.paragraphs[0]
-        fmt(p, double=False, first_line=Inches(0), align=WD_ALIGN_PARAGRAPH.CENTER)
+        section.header.is_linked_to_previous = False
+        p = section.header.paragraphs[0]
+        fmt(p, double=False, first_line=Inches(0), align=WD_ALIGN_PARAGRAPH.RIGHT)
         for r in list(p.runs):
             r._element.getparent().remove(r._element)
         if show:

@@ -32,9 +32,9 @@ CAPTIONS.update({f"Table {n} {title}": ("tables", str(n))
 
 
 def printed_number(page):
-    """The page number as written in the running footer."""
-    floor = page.rect.height * 0.88
-    words = [w for w in page.get_text("words") if w[1] > floor]
+    """The page number as written in the running header."""
+    ceiling = page.rect.height * 0.12
+    words = [w for w in page.get_text("words") if w[3] < ceiling]
     for w in words:
         token = w[4].strip()
         if re.fullmatch(r"[ivxlcdm]+|\d+", token, re.I):
