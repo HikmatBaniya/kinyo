@@ -616,25 +616,30 @@ def build():
         cur.para(t)
     cur.figure(1)
     cur = section(doc, "3.2 Project Timeline")
-    cur.para("The project runs over six months. Requirement analysis, design, "
-             "development, integration, testing, deployment and documentation are "
-             "planned as separate activities, and testing is allocated its own "
-             "period rather than being absorbed into development. The schedule is "
-             "shown in Figure 2.")
+    cur.para("The project runs for nineteen weeks, from Ashadh to Kartik. "
+             "Requirement analysis, design, development, integration, testing, "
+             "deployment and documentation are planned as separate activities, "
+             "and testing is allocated its own period rather than being absorbed "
+             "into development. The schedule is shown in Figure 2.")
     cur.groups([("Planned Activities", [
-        "Months 1 to 2: requirement analysis, literature review and system "
-        "design, so that the data model and the tenancy strategy are settled "
-        "before any application code is written.",
-        "Month 3: database design and migration setup, followed by the tenancy "
-        "and authentication core.",
-        "Months 4 to 5: the catalogue, storefront, cart and order modules, "
-        "together with the seller dashboard and administration console.",
-        "Months 5 to 6: integration of the modules, then unit, integration and "
-        "user acceptance testing.",
-        "Month 6: deployment and domain configuration.",
-        "Months 1 to 6: documentation and report writing, run in parallel so "
-        "that the final report does not depend on a single concentrated effort "
-        "at the end.",
+        "Requirement analysis and system design, five weeks in total, so that "
+        "the data model and the tenancy strategy are settled before any "
+        "application code is written.",
+        "Database design and migration setup, two weeks, followed by the tenancy "
+        "and authentication core over four weeks. This is the highest-risk part "
+        "of the design and is built first so that every later increment "
+        "exercises it.",
+        "Catalogue and inventory, three weeks, then the storefront and "
+        "host-based routing, three weeks.",
+        "Cart and orders, four weeks, then the seller dashboard, administration "
+        "console and reporting, two weeks.",
+        "Integration of the modules, two weeks, overlapping the end of "
+        "development.",
+        "Testing, three weeks, covering unit, integration and user acceptance "
+        "testing, followed by one week for deployment and domain configuration.",
+        "Documentation and report writing run across all nineteen weeks, so that "
+        "the final report does not depend on a single concentrated effort at the "
+        "end.",
     ])])
     cur.figure(2)
     cur = section(doc, "3.3 System Architecture")

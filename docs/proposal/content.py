@@ -98,7 +98,7 @@ ABBREVIATIONS = [
 # ------------------------------------------------------------------ figures --
 FIGURES = {
     1: ("SDLC Model: Iterative and Incremental Development", "fig1_sdlc.png", 6.1),
-    2: ("Gantt Chart", None, None),          # supplied separately
+    2: ("Gantt Chart", "fig2_gantt.jpeg", 6.2),
     3: ("System Architecture of the Kinyo Platform", "fig2_architecture.png", 6.1),
     4: ("System Flowchart: Storefront Resolution to Order Confirmation",
         "fig3_flowchart.png", 5.9),
@@ -444,7 +444,7 @@ TABLE3_ROWS = [
      "small managed database instance. The only unavoidable cost is a domain name for the "
      "demonstration deployment.", "Feasible"),
     ("Schedule",
-     "The six-month timeline in Table 4 allocates separate periods to requirement "
+     "The nineteen-week timeline in Figure 2 allocates separate periods to requirement "
      "analysis, design, development, integration, testing and documentation, with testing "
      "given its own period rather than being merged into development.", "Feasible"),
     ("Legal and ethical",

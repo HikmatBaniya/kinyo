@@ -206,7 +206,8 @@ FEASIBILITY = [
         "seller creates, rather than the cost of a further deployment.",
     ]),
     ("4) Schedule Feasibility", [
-        "The project is scheduled over six months, as set out in Section 3.2.",
+        "The project is scheduled over nineteen weeks, from Ashadh to Kartik, as "
+        "set out in Figure 2.",
         "Requirement analysis, design, development, integration, testing, "
         "deployment and documentation are treated as separate activities, and "
         "testing is allocated its own period rather than being absorbed into "
