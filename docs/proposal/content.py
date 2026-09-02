@@ -19,8 +19,8 @@ META = {
     "supervisor": "[Supervisor Name]",
     "city": "Kathmandu",
     "month_year": "September, 2026",
-    "repo_backend": "https://github.com/HikmatBaniya/swor",
-    "repo_frontend": "https://github.com/HikmatBaniya/swor-front",
+    "repo_backend": "https://github.com/HikmatBaniya/kinyo",
+    "repo_frontend": "https://github.com/HikmatBaniya/kinyo-front",
 }
 
 MONTHS = ["M1", "M2", "M3", "M4", "M5", "M6"]
