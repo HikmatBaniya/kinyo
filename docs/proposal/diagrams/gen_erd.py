@@ -20,16 +20,15 @@ LABEL_FONT = 24
 END_GAP = 16          # distance a line stops short of the box it points at
 
 COL_CX = [255, 750, 1245]
-ROW_TOP = [70, 360, 650, 940, 1230, 1664]
+ROW_TOP = [70, 360, 650, 940, 1230, 1668]
 CANVAS_W = 1500
-CANVAS_H = 1930
+CANVAS_H = 1940
 
 # name, column, row, [(type, attribute, key), ...]
 #
-# The grid is arranged so that related entities sit next to each other: the
-# catalogue runs down the right column, the customer and order path down the
-# left, and the line-item tables sit between them. That keeps almost every
-# relationship between adjacent boxes instead of routing it across the figure.
+# Placement rule: every relationship must join boxes that are neighbours in the
+# grid, so a line is a short hop and its two ends are obvious. Nothing is routed
+# around the outside of the figure.
 ENTITIES = [
     ("USER", 0, 0, [
         ("uuid", "id", "PK"), ("str", "email", "UK"),
@@ -71,21 +70,21 @@ ENTITIES = [
         ("uuid", "id", "PK"), ("uuid", "variant_id", "FK"),
         ("int", "qty_on_hand", ""), ("int", "qty_reserved", "")]),
 
-    ("DISCOUNT", 0, 4, [
-        ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
-        ("str", "code", "UK"), ("dec", "value", "")]),
-    ("ORDERS", 1, 4, [
+    ("ORDERS", 0, 4, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("uuid", "customer_id", "FK"), ("uuid", "address_id", "FK"),
         ("uuid", "discount_id", "FK"), ("str", "order_number", "UK"),
         ("str", "status", ""), ("dec", "total", "")]),
-    ("ORDER_ITEM", 2, 4, [
+    ("ORDER_ITEM", 1, 4, [
         ("uuid", "id", "PK"), ("uuid", "order_id", "FK"),
         ("uuid", "variant_id", "FK"), ("int", "quantity", "")]),
 
-    ("SHIPPING_ZONE", 1, 5, [
+    ("SHIPPING_ZONE", 0, 5, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("str", "name", ""), ("dec", "base_rate", "")]),
+    ("DISCOUNT", 1, 5, [
+        ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
+        ("str", "code", "UK"), ("dec", "value", "")]),
 ]
 
 BOX = {}
@@ -120,9 +119,9 @@ def B(n, f=0.5):
     return (b["x"] + b["w"] * f, b["y"] + b["h"])
 
 
-def vchan(i):
+def vchan(i, offset=0):
     """x of the routing channel between column i and column i + 1."""
-    return (COL_CX[i] + BOX_W / 2 + COL_CX[i + 1] - BOX_W / 2) / 2
+    return (COL_CX[i] + BOX_W / 2 + COL_CX[i + 1] - BOX_W / 2) / 2 + offset
 
 
 LEFT_CH = 30
@@ -157,61 +156,67 @@ def hrel(a, b, y, ms, me, label, side="right"):
     rel([p0, p1], ms, me, label, (p0[0] + p1[0]) / 2, y - 13)
 
 
+# Every relationship below joins neighbouring boxes. The label sits beside the
+# middle of the line so it is obvious which pair of entities it belongs to.
+
 # --- identity and tenancy -------------------------------------------------
 hrel("USER", "MEMBERSHIP", 170, "one", "many", "holds")
-hrel("TENANT", "MEMBERSHIP", 220, "one", "many", "grants", side="left")
+hrel("TENANT", "MEMBERSHIP", 210, "one", "many", "grants", side="left")
 
-rel([B("TENANT", 0.5), T("PRODUCT", 0.5)], "one", "many",
-    "owns", COL_CX[2] + 16, 315, "start")
-rel([B("TENANT", 0.24), (B("TENANT", 0.24)[0], 312),
-     (T("COLLECTION", 0.62)[0], 312), T("COLLECTION", 0.62)],
-    "one", "many", "owns", 1000, 300)
-rel([B("TENANT", 0.1), (B("TENANT", 0.1)[0], 286),
-     (T("DOMAIN", 0.5)[0], 286), T("DOMAIN", 0.5)],
-    "one", "many", "has", 560, 274)
+# TENANT fans down into the entities it owns, on a shared bus under the box
+BUS = 306
+rel([B("TENANT", 0.3), (B("TENANT", 0.3)[0], BUS),
+     (T("DOMAIN", 0.5)[0], BUS), T("DOMAIN", 0.5)],
+    "one", "many", "owns", T("DOMAIN", 0.5)[0] + 16, BUS - 12, "start")
+rel([B("TENANT", 0.5), (B("TENANT", 0.5)[0], BUS),
+     (T("COLLECTION", 0.5)[0], BUS), T("COLLECTION", 0.5)],
+    "one", "many", "owns", T("COLLECTION", 0.5)[0] + 16, BUS - 12, "start")
+rel([B("TENANT", 0.7), T("PRODUCT", 0.7)], "one", "many",
+    "owns", T("PRODUCT", 0.7)[0] + 16, BUS - 12, "start")
 
-CH_L = vchan(0)
-rel([B("TENANT", 0.06), (B("TENANT", 0.06)[0], 336), (CH_L, 336),
-     (CH_L, 604), (T("CUSTOMER", 0.75)[0], 604), T("CUSTOMER", 0.75)],
-    "one", "many", "owns", CH_L + 12, 470, "start")
+# the fourth owned entity sits a row lower; the drop stays inside the figure
+X_CUST = vchan(0)
+rel([B("TENANT", 0.12), (B("TENANT", 0.12)[0], BUS - 26), (X_CUST, BUS - 26),
+     (X_CUST, 600), (T("CUSTOMER", 0.8)[0], 600), T("CUSTOMER", 0.8)],
+    "one", "many", "owns", X_CUST + 14, 560, "start")
 
 # --- catalogue ------------------------------------------------------------
-hrel("COLLECTION", "PRODUCT", 470, "many", "many", "grouped in")
-rel([B("PRODUCT", 0.4), T("PRODUCT_VARIANT", 0.4)], "one", "many",
-    "sold as", COL_CX[2] - 205, 610, "end")
-rel([B("PRODUCT_VARIANT", 0.4), T("INVENTORY_ITEM", 0.4)], "one", "one",
-    "stocked as", COL_CX[2] - 25, 940, "start")
+hrel("PRODUCT", "COLLECTION", 470, "many", "many", "grouped in", side="left")
+rel([B("PRODUCT", 0.45), T("PRODUCT_VARIANT", 0.45)], "one", "many",
+    "sold as", B("PRODUCT", 0.45)[0] + 16, 610, "start")
+rel([B("PRODUCT_VARIANT", 0.45), T("INVENTORY_ITEM", 0.45)], "one", "one",
+    "stocked as", B("PRODUCT_VARIANT", 0.45)[0] + 16, 900, "start")
 
-rel([B("PRODUCT_VARIANT", 0.78), (B("PRODUCT_VARIANT", 0.78)[0], 890),
-     (T("CART_ITEM", 0.72)[0], 890), T("CART_ITEM", 0.72)],
-    "one", "many", "chosen in", 900, 878)
+rel([B("PRODUCT_VARIANT", 0.2), (B("PRODUCT_VARIANT", 0.2)[0], 892),
+     (T("CART_ITEM", 0.8)[0], 892), T("CART_ITEM", 0.8)],
+    "one", "many", "chosen in", 1000, 880)
 
-CH_R = RIGHT_CH
-rel([R("PRODUCT_VARIANT", 0.62), (CH_R, R("PRODUCT_VARIANT", 0.62)[1]),
-     (CH_R, 1186), (T("ORDER_ITEM", 0.78)[0], 1186), T("ORDER_ITEM", 0.78)],
-    "one", "many", "sold in", CH_R - 12, 1174, "end")
+X_SOLD = vchan(1, 34)
+rel([L("PRODUCT_VARIANT", 0.8), (X_SOLD, L("PRODUCT_VARIANT", 0.8)[1]),
+     (X_SOLD, 1182), (T("ORDER_ITEM", 0.85)[0], 1182), T("ORDER_ITEM", 0.85)],
+    "one", "many", "sold in", 990, 1172)
 
-# --- customers, carts -----------------------------------------------------
+# --- customers, carts and orders ------------------------------------------
 hrel("CUSTOMER", "CART", 760, "one", "many", "owns")
-rel([B("CUSTOMER", 0.35), T("ADDRESS", 0.35)], "one", "many",
-    "saves", COL_CX[0] - 40, 900, "start")
+rel([B("CUSTOMER", 0.45), T("ADDRESS", 0.45)], "one", "many",
+    "saves", B("CUSTOMER", 0.45)[0] + 16, 900, "start")
 rel([B("CART", 0.5), T("CART_ITEM", 0.5)], "one", "many",
-    "contains", COL_CX[1] + 16, 946, "start")
+    "contains", B("CART", 0.5)[0] + 16, 900, "start")
 
-# --- orders ---------------------------------------------------------------
-rel([L("CUSTOMER", 0.62), (LEFT_CH, L("CUSTOMER", 0.62)[1]),
-     (LEFT_CH, 1500), (BOX["ORDERS"]["x"], 1500)],
-    "one", "many", "places", LEFT_CH + 34, 1478, "start")
+X_PLACES = vchan(0, -30)
+rel([R("CUSTOMER", 0.75), (X_PLACES, R("CUSTOMER", 0.75)[1]),
+     (X_PLACES, 1186), (T("ORDERS", 0.9)[0], 1186), T("ORDERS", 0.9)],
+    "one", "many", "places", X_PLACES + 14, 1000, "start")
 
-rel([R("ADDRESS", 0.6), (CH_L, R("ADDRESS", 0.6)[1]),
-     (CH_L, 1190), (T("ORDERS", 0.25)[0], 1190), T("ORDERS", 0.25)],
-    "one", "many", "ships to", CH_L + 12, 1178, "start")
-
-hrel("DISCOUNT", "ORDERS", 1330, "one", "many", "reduces")
+rel([B("ADDRESS", 0.4), T("ORDERS", 0.4)], "one", "many",
+    "ships to", B("ADDRESS", 0.4)[0] + 16, 1190, "start")
 hrel("ORDERS", "ORDER_ITEM", 1330, "one", "many", "contains")
 
-rel([T("SHIPPING_ZONE", 0.5), B("ORDERS", 0.5)], "one", "many",
-    "prices", COL_CX[1] + 16, 1625, "start")
+rel([T("SHIPPING_ZONE", 0.4), B("ORDERS", 0.4)], "one", "many",
+    "prices", T("SHIPPING_ZONE", 0.4)[0] + 16, 1628, "start")
+rel([T("DISCOUNT", 0.35), (T("DISCOUNT", 0.35)[0], 1624),
+     (B("ORDERS", 0.75)[0], 1624), B("ORDERS", 0.75)],
+    "one", "many", "reduces", 600, 1612)
 
 
 def esc(s):

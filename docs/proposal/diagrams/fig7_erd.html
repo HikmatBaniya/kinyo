@@ -15,7 +15,7 @@
   path.rel { stroke: #4a4a4a; stroke-width: 2; fill: none; }
 </style>
 <div id="figure">
-<svg width="1500" height="1930" viewBox="0 0 1500 1930"
+<svg width="1500" height="1940" viewBox="0 0 1500 1940"
      xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="one" viewBox="0 0 26 26" refX="20" refY="13"
@@ -236,9 +236,9 @@
   <text class="ty" x="1066" y="1130">int</text>
   <text class="at" x="1154" y="1130">qty_reserved</text>
 
-  <rect class="box" x="60" y="1230" width="390" height="200" rx="3"/>
+  <rect class="box" x="60" y="1230" width="390" height="352" rx="3"/>
   <rect class="hdr" x="60" y="1230" width="390" height="48" rx="3"/>
-  <text class="ent" x="255" y="1264">DISCOUNT</text>
+  <text class="ent" x="255" y="1264">ORDERS</text>
   <text class="ty" x="76" y="1306">uuid</text>
   <text class="at" x="164" y="1306">id</text>
   <text class="ky" x="436" y="1306">PK</text>
@@ -247,117 +247,117 @@
   <text class="at" x="164" y="1344">tenant_id</text>
   <text class="ky" x="436" y="1344">FK</text>
   <line class="sep" x1="70" y1="1354" x2="440" y2="1354"/>
-  <text class="ty" x="76" y="1382">str</text>
-  <text class="at" x="164" y="1382">code</text>
-  <text class="ky" x="436" y="1382">UK</text>
+  <text class="ty" x="76" y="1382">uuid</text>
+  <text class="at" x="164" y="1382">customer_id</text>
+  <text class="ky" x="436" y="1382">FK</text>
   <line class="sep" x1="70" y1="1392" x2="440" y2="1392"/>
-  <text class="ty" x="76" y="1420">dec</text>
-  <text class="at" x="164" y="1420">value</text>
+  <text class="ty" x="76" y="1420">uuid</text>
+  <text class="at" x="164" y="1420">address_id</text>
+  <text class="ky" x="436" y="1420">FK</text>
+  <line class="sep" x1="70" y1="1430" x2="440" y2="1430"/>
+  <text class="ty" x="76" y="1458">uuid</text>
+  <text class="at" x="164" y="1458">discount_id</text>
+  <text class="ky" x="436" y="1458">FK</text>
+  <line class="sep" x1="70" y1="1468" x2="440" y2="1468"/>
+  <text class="ty" x="76" y="1496">str</text>
+  <text class="at" x="164" y="1496">order_number</text>
+  <text class="ky" x="436" y="1496">UK</text>
+  <line class="sep" x1="70" y1="1506" x2="440" y2="1506"/>
+  <text class="ty" x="76" y="1534">str</text>
+  <text class="at" x="164" y="1534">status</text>
+  <line class="sep" x1="70" y1="1544" x2="440" y2="1544"/>
+  <text class="ty" x="76" y="1572">dec</text>
+  <text class="at" x="164" y="1572">total</text>
 
-  <rect class="box" x="555" y="1230" width="390" height="352" rx="3"/>
+  <rect class="box" x="555" y="1230" width="390" height="200" rx="3"/>
   <rect class="hdr" x="555" y="1230" width="390" height="48" rx="3"/>
-  <text class="ent" x="750" y="1264">ORDERS</text>
+  <text class="ent" x="750" y="1264">ORDER_ITEM</text>
   <text class="ty" x="571" y="1306">uuid</text>
   <text class="at" x="659" y="1306">id</text>
   <text class="ky" x="931" y="1306">PK</text>
   <line class="sep" x1="565" y1="1316" x2="935" y2="1316"/>
   <text class="ty" x="571" y="1344">uuid</text>
-  <text class="at" x="659" y="1344">tenant_id</text>
+  <text class="at" x="659" y="1344">order_id</text>
   <text class="ky" x="931" y="1344">FK</text>
   <line class="sep" x1="565" y1="1354" x2="935" y2="1354"/>
   <text class="ty" x="571" y="1382">uuid</text>
-  <text class="at" x="659" y="1382">customer_id</text>
+  <text class="at" x="659" y="1382">variant_id</text>
   <text class="ky" x="931" y="1382">FK</text>
   <line class="sep" x1="565" y1="1392" x2="935" y2="1392"/>
-  <text class="ty" x="571" y="1420">uuid</text>
-  <text class="at" x="659" y="1420">address_id</text>
-  <text class="ky" x="931" y="1420">FK</text>
-  <line class="sep" x1="565" y1="1430" x2="935" y2="1430"/>
-  <text class="ty" x="571" y="1458">uuid</text>
-  <text class="at" x="659" y="1458">discount_id</text>
-  <text class="ky" x="931" y="1458">FK</text>
-  <line class="sep" x1="565" y1="1468" x2="935" y2="1468"/>
-  <text class="ty" x="571" y="1496">str</text>
-  <text class="at" x="659" y="1496">order_number</text>
-  <text class="ky" x="931" y="1496">UK</text>
-  <line class="sep" x1="565" y1="1506" x2="935" y2="1506"/>
-  <text class="ty" x="571" y="1534">str</text>
-  <text class="at" x="659" y="1534">status</text>
-  <line class="sep" x1="565" y1="1544" x2="935" y2="1544"/>
-  <text class="ty" x="571" y="1572">dec</text>
-  <text class="at" x="659" y="1572">total</text>
+  <text class="ty" x="571" y="1420">int</text>
+  <text class="at" x="659" y="1420">quantity</text>
 
-  <rect class="box" x="1050" y="1230" width="390" height="200" rx="3"/>
-  <rect class="hdr" x="1050" y="1230" width="390" height="48" rx="3"/>
-  <text class="ent" x="1245" y="1264">ORDER_ITEM</text>
-  <text class="ty" x="1066" y="1306">uuid</text>
-  <text class="at" x="1154" y="1306">id</text>
-  <text class="ky" x="1426" y="1306">PK</text>
-  <line class="sep" x1="1060" y1="1316" x2="1430" y2="1316"/>
-  <text class="ty" x="1066" y="1344">uuid</text>
-  <text class="at" x="1154" y="1344">order_id</text>
-  <text class="ky" x="1426" y="1344">FK</text>
-  <line class="sep" x1="1060" y1="1354" x2="1430" y2="1354"/>
-  <text class="ty" x="1066" y="1382">uuid</text>
-  <text class="at" x="1154" y="1382">variant_id</text>
-  <text class="ky" x="1426" y="1382">FK</text>
-  <line class="sep" x1="1060" y1="1392" x2="1430" y2="1392"/>
-  <text class="ty" x="1066" y="1420">int</text>
-  <text class="at" x="1154" y="1420">quantity</text>
+  <rect class="box" x="60" y="1668" width="390" height="200" rx="3"/>
+  <rect class="hdr" x="60" y="1668" width="390" height="48" rx="3"/>
+  <text class="ent" x="255" y="1702">SHIPPING_ZONE</text>
+  <text class="ty" x="76" y="1744">uuid</text>
+  <text class="at" x="164" y="1744">id</text>
+  <text class="ky" x="436" y="1744">PK</text>
+  <line class="sep" x1="70" y1="1754" x2="440" y2="1754"/>
+  <text class="ty" x="76" y="1782">uuid</text>
+  <text class="at" x="164" y="1782">tenant_id</text>
+  <text class="ky" x="436" y="1782">FK</text>
+  <line class="sep" x1="70" y1="1792" x2="440" y2="1792"/>
+  <text class="ty" x="76" y="1820">str</text>
+  <text class="at" x="164" y="1820">name</text>
+  <line class="sep" x1="70" y1="1830" x2="440" y2="1830"/>
+  <text class="ty" x="76" y="1858">dec</text>
+  <text class="at" x="164" y="1858">base_rate</text>
 
-  <rect class="box" x="555" y="1664" width="390" height="200" rx="3"/>
-  <rect class="hdr" x="555" y="1664" width="390" height="48" rx="3"/>
-  <text class="ent" x="750" y="1698">SHIPPING_ZONE</text>
-  <text class="ty" x="571" y="1740">uuid</text>
-  <text class="at" x="659" y="1740">id</text>
-  <text class="ky" x="931" y="1740">PK</text>
-  <line class="sep" x1="565" y1="1750" x2="935" y2="1750"/>
-  <text class="ty" x="571" y="1778">uuid</text>
-  <text class="at" x="659" y="1778">tenant_id</text>
-  <text class="ky" x="931" y="1778">FK</text>
-  <line class="sep" x1="565" y1="1788" x2="935" y2="1788"/>
-  <text class="ty" x="571" y="1816">str</text>
-  <text class="at" x="659" y="1816">name</text>
-  <line class="sep" x1="565" y1="1826" x2="935" y2="1826"/>
-  <text class="ty" x="571" y="1854">dec</text>
-  <text class="at" x="659" y="1854">base_rate</text>
+  <rect class="box" x="555" y="1668" width="390" height="200" rx="3"/>
+  <rect class="hdr" x="555" y="1668" width="390" height="48" rx="3"/>
+  <text class="ent" x="750" y="1702">DISCOUNT</text>
+  <text class="ty" x="571" y="1744">uuid</text>
+  <text class="at" x="659" y="1744">id</text>
+  <text class="ky" x="931" y="1744">PK</text>
+  <line class="sep" x1="565" y1="1754" x2="935" y2="1754"/>
+  <text class="ty" x="571" y="1782">uuid</text>
+  <text class="at" x="659" y="1782">tenant_id</text>
+  <text class="ky" x="931" y="1782">FK</text>
+  <line class="sep" x1="565" y1="1792" x2="935" y2="1792"/>
+  <text class="ty" x="571" y="1820">str</text>
+  <text class="at" x="659" y="1820">code</text>
+  <text class="ky" x="931" y="1820">UK</text>
+  <line class="sep" x1="565" y1="1830" x2="935" y2="1830"/>
+  <text class="ty" x="571" y="1858">dec</text>
+  <text class="at" x="659" y="1858">value</text>
   <path class="rel" d="M466 170 L539 170" marker-start="url(#one)" marker-end="url(#many)"/>
   <text class="rl" x="502" y="157" text-anchor="middle">holds</text>
-  <path class="rel" d="M1034 220 L961 220" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="998" y="207" text-anchor="middle">grants</text>
-  <path class="rel" d="M1245 286 L1245 344" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="1261" y="315" text-anchor="start">owns</text>
-  <path class="rel" d="M1144 286 L1144 312 L797 312 L797 344" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="1000" y="300" text-anchor="middle">owns</text>
-  <path class="rel" d="M1089 286 L1089 286 L255 286 L255 344" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="560" y="274" text-anchor="middle">has</text>
-  <path class="rel" d="M1073 286 L1073 336 L502 336 L502 604 L352 604 L352 634" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="514" y="470" text-anchor="start">owns</text>
-  <path class="rel" d="M961 470 L1034 470" marker-start="url(#many)" marker-end="url(#many)"/>
+  <path class="rel" d="M1034 210 L961 210" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="998" y="197" text-anchor="middle">grants</text>
+  <path class="rel" d="M1167 286 L1167 306 L255 306 L255 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="271" y="294" text-anchor="start">owns</text>
+  <path class="rel" d="M1245 286 L1245 306 L750 306 L750 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="766" y="294" text-anchor="start">owns</text>
+  <path class="rel" d="M1323 286 L1323 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="1339" y="294" text-anchor="start">owns</text>
+  <path class="rel" d="M1097 286 L1097 280 L502 280 L502 600 L372 600 L372 634" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="516" y="560" text-anchor="start">owns</text>
+  <path class="rel" d="M1034 470 L961 470" marker-start="url(#many)" marker-end="url(#many)"/>
   <text class="rl" x="998" y="457" text-anchor="middle">grouped in</text>
-  <path class="rel" d="M1206 576 L1206 634" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="1040" y="610" text-anchor="end">sold as</text>
-  <path class="rel" d="M1206 866 L1206 924" marker-start="url(#one)" marker-end="url(#one)"/>
-  <text class="rl" x="1220" y="940" text-anchor="start">stocked as</text>
-  <path class="rel" d="M1354 866 L1354 890 L836 890 L836 924" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="900" y="878" text-anchor="middle">chosen in</text>
-  <path class="rel" d="M1456 774 L1470 774 L1470 1186 L1354 1186 L1354 1214" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="1458" y="1174" text-anchor="end">sold in</text>
+  <path class="rel" d="M1226 576 L1226 634" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="1242" y="610" text-anchor="start">sold as</text>
+  <path class="rel" d="M1226 866 L1226 924" marker-start="url(#one)" marker-end="url(#one)"/>
+  <text class="rl" x="1242" y="900" text-anchor="start">stocked as</text>
+  <path class="rel" d="M1128 866 L1128 892 L867 892 L867 924" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="1000" y="880" text-anchor="middle">chosen in</text>
+  <path class="rel" d="M1034 810 L1032 810 L1032 1182 L886 1182 L886 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="990" y="1172" text-anchor="middle">sold in</text>
   <path class="rel" d="M466 760 L539 760" marker-start="url(#one)" marker-end="url(#many)"/>
   <text class="rl" x="502" y="747" text-anchor="middle">owns</text>
-  <path class="rel" d="M196 866 L196 924" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="215" y="900" text-anchor="start">saves</text>
+  <path class="rel" d="M236 866 L236 924" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="252" y="900" text-anchor="start">saves</text>
   <path class="rel" d="M750 828 L750 924" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="766" y="946" text-anchor="start">contains</text>
-  <path class="rel" d="M44 774 L30 774 L30 1500 L539 1500" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="64" y="1478" text-anchor="start">places</text>
-  <path class="rel" d="M466 1060 L502 1060 L502 1190 L652 1190 L652 1214" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="514" y="1178" text-anchor="start">ships to</text>
+  <text class="rl" x="766" y="900" text-anchor="start">contains</text>
+  <path class="rel" d="M466 800 L472 800 L472 1186 L411 1186 L411 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="486" y="1000" text-anchor="start">places</text>
+  <path class="rel" d="M216 1156 L216 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="232" y="1190" text-anchor="start">ships to</text>
   <path class="rel" d="M466 1330 L539 1330" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="502" y="1317" text-anchor="middle">reduces</text>
-  <path class="rel" d="M961 1330 L1034 1330" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="998" y="1317" text-anchor="middle">contains</text>
-  <path class="rel" d="M750 1648 L750 1598" marker-start="url(#one)" marker-end="url(#many)"/>
-  <text class="rl" x="766" y="1625" text-anchor="start">prices</text>
+  <text class="rl" x="502" y="1317" text-anchor="middle">contains</text>
+  <path class="rel" d="M216 1652 L216 1598" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="232" y="1628" text-anchor="start">prices</text>
+  <path class="rel" d="M692 1652 L692 1624 L352 1624 L352 1598" marker-start="url(#one)" marker-end="url(#many)"/>
+  <text class="rl" x="600" y="1612" text-anchor="middle">reduces</text>
 </svg>
 </div>
