@@ -29,6 +29,7 @@ from docx.table import Table
 from docx.text.paragraph import Paragraph
 
 import content as C
+import content_prose as P
 
 HERE = Path(__file__).parent
 FIG_DIR = HERE / "figures"
@@ -126,9 +127,35 @@ class Cursor:
         self._attach(p._element)
         return p
 
+    def groups(self, blocks):
+        """A bold run-in heading followed by its bullets, as in the sample."""
+        for heading, items in blocks:
+            p = self.doc.add_paragraph()
+            fmt(p, first_line=Inches(0), keep_next=True)
+            set_run(p.add_run(heading), bold=True)
+            self._attach(p._element)
+            for item in items:
+                self.bullet(item)
+
     # --- figures and tables, per the template's Table A3 -------------------
     def figure(self, number, *, note=None):
         title, filename, width_in = C.FIGURES[number]
+        if filename is None:            # placeholder for a figure supplied later
+            p = self.doc.add_paragraph()
+            fmt(p, first_line=Inches(0), keep_next=True)
+            set_run(p.add_run(f"Figure {number}"), bold=True)
+            self._attach(p._element)
+            p = self.doc.add_paragraph()
+            fmt(p, first_line=Inches(0), keep_next=True)
+            set_run(p.add_run(title))
+            self._attach(p._element)
+            p = self.doc.add_paragraph()
+            fmt(p, double=False, first_line=Inches(0),
+                align=WD_ALIGN_PARAGRAPH.CENTER)
+            set_run(p.add_run("[ Insert Gantt chart here ]"))
+            self._attach(p._element)
+            self.blank()
+            return
         p = self.doc.add_paragraph()
         fmt(p, first_line=Inches(0), keep_next=True)
         set_run(p.add_run(f"Figure {number}"), bold=True)
@@ -490,10 +517,15 @@ def build():
               [0.8, 4.6, 0.8], number=None, title=None, caption=False)
 
     cur = section(doc, "List of Tables")
-    cur.table(["Table", "Title", "Page"],
-              [[str(n), C.TABLE_TITLES[n], PAGE_INDEX["tables"].get(str(n), "")]
-               for n in sorted(C.TABLE_TITLES)],
-              [0.8, 4.6, 0.8], number=None, title=None, caption=False)
+    if C.TABLE_TITLES:
+        cur.table(["Table", "Title", "Page"],
+                  [[str(n), C.TABLE_TITLES[n], PAGE_INDEX["tables"].get(str(n), "")]
+                   for n in sorted(C.TABLE_TITLES)],
+                  [0.8, 4.6, 0.8], number=None, title=None, caption=False)
+    else:
+        cur.para("The report presents its comparative and requirement "
+                 "information in the text rather than in numbered tables, so no "
+                 "table list is required.")
 
     cur = section(doc, "List of Abbreviations")
     cur.table(["Abbreviation", "Expansion"], [[a, e] for a, e in C.ABBREVIATIONS],
@@ -527,14 +559,10 @@ def build():
     for t in C.CH2_THEORY:
         cur.para(t)
     cur = section(doc, "2.2 Study of Related Systems")
-    cur.para("Six existing systems relevant to the problem area were reviewed. Table 1 "
-             "compares them by platform, technique, key features and limitations. Each "
-             "entry is cited in the reference list.")
-    cur.table(["Author / System", "Platform", "Technique or Approach", "Key Features",
-               "Limitations"], [list(r) for r in C.TABLE1_ROWS],
-              [1.0, 0.9, 1.35, 1.35, 1.6], number=1, title=C.TABLE_TITLES[1],
-              note="All systems listed were reviewed through their official "
-                   "documentation, which is cited in the reference list.")
+    cur.para("Six existing systems relevant to the problem area were reviewed. Each "
+             "is summarised below by platform, approach, strengths and limitations, "
+             "and each is cited in the reference list.")
+    cur.groups(P.RELATED_SYSTEMS)
     for t in C.CH2_TABLE1_DISCUSSION:
         cur.para(t)
     cur = section(doc, "2.3 Contribution of the Proposed System")
@@ -542,20 +570,19 @@ def build():
     for t in C.CH2_CONTRIBUTION_ITEMS:
         cur.bullet(t)
     cur = section(doc, "2.4 Functional and Non-Functional Requirements")
-    cur.para("Table 2 states what the system must do and how well it must perform. "
-             "Priority is recorded as High for requirements without which the system "
-             "cannot meet its general objective, and Medium for those that improve the "
-             "system but are not essential to a working release.")
-    cur.table(["Requirement Type", "Description", "Priority"],
-              [list(r) for r in C.TABLE2_ROWS], [1.8, 3.6, 0.8],
-              number=2, title=C.TABLE_TITLES[2])
+    cur.para("This section states what the system must do and how well it must "
+             "perform. The functional requirements describe the operations the "
+             "system carries out; the non-functional requirements describe the "
+             "qualities it must exhibit while doing so.")
+    cur.para("Functional Requirements", indent=False, bold=True)
+    cur.groups(P.FUNCTIONAL_REQUIREMENTS)
+    cur.para("Non-Functional Requirements", indent=False, bold=True)
+    cur.groups(P.NONFUNCTIONAL_REQUIREMENTS)
     cur = section(doc, "2.5 Feasibility Study")
-    cur.para("The feasibility study evaluates whether the proposed project can be "
-             "completed with the available resources, time and skills. Table 3 "
-             "summarises the analysis.")
-    cur.table(["Feasibility Type", "Analysis", "Verdict"],
-              [list(r) for r in C.TABLE3_ROWS], [1.35, 4.05, 0.8],
-              number=3, title=C.TABLE_TITLES[3])
+    cur.para("The feasibility study evaluates whether the proposed platform can be "
+             "developed and deployed within the available technical, operational, "
+             "economic, schedule and legal constraints.")
+    cur.groups(P.FEASIBILITY)
     cur.para("Based on the above analysis, the project is determined to be feasible "
              "within the given academic timeframe, available tools and team capability.")
 
@@ -565,20 +592,31 @@ def build():
         cur.para(t)
     cur.figure(1)
     cur = section(doc, "3.2 Project Timeline")
-    cur.para("Table 4 presents the proposed timeline. Requirement analysis, design, "
-             "development, testing and documentation appear as separate activities, and "
-             "testing is allocated its own period rather than being absorbed into "
-             "development.")
-    shade = {i: [1 + mi for mi in months] for i, (_a, months) in enumerate(C.TIMELINE)}
-    cur.table(["Activity"] + C.MONTHS,
-              [[a] + [""] * len(C.MONTHS) for a, _m in C.TIMELINE],
-              [2.8] + [0.55] * len(C.MONTHS), number=4, title=C.TABLE_TITLES[4],
-              shade=shade,
-              note="Shaded cells indicate the planned duration of each activity.")
+    cur.para("The project runs over six months. Requirement analysis, design, "
+             "development, integration, testing, deployment and documentation are "
+             "planned as separate activities, and testing is allocated its own "
+             "period rather than being absorbed into development. The schedule is "
+             "shown in Figure 2.")
+    cur.groups([("Planned Activities", [
+        "Months 1 to 2: requirement analysis, literature review and system "
+        "design, so that the data model and the tenancy strategy are settled "
+        "before any application code is written.",
+        "Month 3: database design and migration setup, followed by the tenancy "
+        "and authentication core.",
+        "Months 4 to 5: the catalogue, storefront, cart and order modules, "
+        "together with the seller dashboard and administration console.",
+        "Months 5 to 6: integration of the modules, then unit, integration and "
+        "user acceptance testing.",
+        "Month 6: deployment and domain configuration.",
+        "Months 1 to 6: documentation and report writing, run in parallel so "
+        "that the final report does not depend on a single concentrated effort "
+        "at the end.",
+    ])])
+    cur.figure(2)
     cur = section(doc, "3.3 System Architecture")
     for t in C.CH3_ARCHITECTURE:
         cur.para(t)
-    cur.figure(2)
+    cur.figure(3)
     cur = section(doc, "3.4 Algorithm")
     cur.para(C.CH3_ALGO_INTRO)
     for title, intro, steps in ((C.ALGO_1_TITLE, C.ALGO_1_INTRO, C.ALGO_1_STEPS),
@@ -590,29 +628,29 @@ def build():
             cur.numbered(i, s)
     cur = section(doc, "3.5 System Flowchart")
     cur.para(C.CH3_FLOWCHART[0])
-    cur.figure(3, note="Numbered circles are off-page connectors: control leaves a "
+    cur.figure(4, note="Numbered circles are off-page connectors: control leaves a "
                        "connector in one stage and resumes at the connector with the "
                        "same number in another stage.")
     for t in C.CH3_FLOWCHART[1:]:
         cur.para(t)
     cur = section(doc, "3.6 Use Case Diagram")
     cur.para(C.CH3_USECASE[0])
-    cur.figure(4)
+    cur.figure(5)
     for t in C.CH3_USECASE[1:]:
         cur.para(t)
     section(doc, "3.7 Data Flow Diagram")
     cur = section(doc, "3.7.1 Level 0")
     for t in C.CH3_DFD0:
         cur.para(t)
-    cur.figure(5)
+    cur.figure(6)
     cur = section(doc, "3.7.2 Level 1")
     cur.para(C.CH3_DFD1[0])
-    cur.figure(6)
+    cur.figure(7)
     for t in C.CH3_DFD1[1:]:
         cur.para(t)
     cur = section(doc, "3.8 Entity Relationship Diagram")
     cur.para(C.CH3_ERD[0])
-    cur.figure(7, note="Every tenant-owned entity carries tenant_id as a foreign key "
+    cur.figure(8, note="Every tenant-owned entity carries tenant_id as a foreign key "
                        "referencing TENANT. For legibility only the principal ownership "
                        "relationships are drawn.")
     for t in C.CH3_ERD[1:]:
@@ -622,19 +660,16 @@ def build():
     cur = section(doc, "Chapter 4: Implementation Plan")
     cur.para(C.CH4_INTRO)
     cur = section(doc, "4.1 Hardware and Software Requirements")
-    cur.para("Table 5 lists the hardware and software required to develop, test and "
-             "deploy the system.")
-    cur.table(["Component", "Specification / Tool", "Purpose"],
-              [list(r) for r in C.TABLE5_ROWS], [1.4, 2.2, 2.6],
-              number=5, title=C.TABLE_TITLES[5])
+    cur.para("This section states the hardware and software required to develop, "
+             "test and deploy the system.")
+    cur.para("Hardware Requirements", indent=False, bold=True)
+    cur.groups(P.HARDWARE_REQUIREMENTS)
+    cur.para("Software Requirements", indent=False, bold=True)
+    cur.groups(P.SOFTWARE_REQUIREMENTS)
     cur = section(doc, "4.2 Proposed Technology Stack")
-    cur.para("Table 6 lists the proposed technology stack. Each major choice is "
-             "justified after the table.")
-    cur.table(["Layer", "Proposed Choice"], [list(r) for r in C.TABLE6_ROWS],
-              [2.3, 3.9], number=6, title=C.TABLE_TITLES[6])
-    h3_after(doc, cur, "Justification of the Technology Choices")
-    for t in C.CH4_JUSTIFICATION:
-        cur.para(t)
+    cur.para("The proposed technology stack is set out below, tier by tier, with "
+             "the reason for each major choice stated alongside it.")
+    cur.groups(P.TECHNOLOGY_STACK)
     cur = section(doc, "4.3 Proposed Testing and Development Approach")
     cur.para(C.CH4_STRUCTURE_INTRO)
     for lead, text in C.CH4_APPROACH_ITEMS:

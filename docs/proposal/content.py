@@ -99,23 +99,17 @@ ABBREVIATIONS = [
 # ------------------------------------------------------------------ figures --
 FIGURES = {
     1: ("SDLC Model: Iterative and Incremental Development", "fig1_sdlc.png", 6.1),
-    2: ("System Architecture of the Kinyo Platform", "fig2_architecture.png", 6.1),
-    3: ("System Flowchart: Storefront Resolution to Order Confirmation",
+    2: ("Gantt Chart", None, None),          # supplied separately
+    3: ("System Architecture of the Kinyo Platform", "fig2_architecture.png", 6.1),
+    4: ("System Flowchart: Storefront Resolution to Order Confirmation",
         "fig3_flowchart.png", 5.9),
-    4: ("Use Case Diagram", "fig4_usecase.png", 6.0),
-    5: ("Data Flow Diagram: Level 0 (Context Diagram)", "fig5_dfd0.png", 6.1),
-    6: ("Data Flow Diagram: Level 1", "fig6_dfd1.png", 6.1),
-    7: ("Entity Relationship (ER) Diagram", "fig7_erd.png", 5.8),
+    5: ("Use Case Diagram", "fig4_usecase.png", 6.0),
+    6: ("Data Flow Diagram: Level 0 (Context Diagram)", "fig5_dfd0.png", 6.1),
+    7: ("Data Flow Diagram: Level 1", "fig6_dfd1.png", 6.1),
+    8: ("Entity Relationship (ER) Diagram", "fig7_erd.png", 5.8),
 }
 
-TABLE_TITLES = {
-    1: "Study of Related Systems and Related Work",
-    2: "Functional and Non-Functional Requirements",
-    3: "Feasibility Analysis Summary",
-    4: "Proposed Project Timeline",
-    5: "Hardware and Software Requirements",
-    6: "Proposed Technology Stack",
-}
+TABLE_TITLES = {}
 
 # =========================================================== CHAPTER 1 =======
 CH1_BACKGROUND = [
@@ -488,7 +482,7 @@ CH3_SDLC = [
 
 CH3_ARCHITECTURE = [
     "The system follows a three-tier architecture consisting of a presentation tier, an "
-    "application tier and a data tier, shown in Figure 2. The tiers communicate only "
+    "application tier and a data tier, shown in Figure 3. The tiers communicate only "
     "through defined interfaces, so that each can be developed and deployed separately.",
 
     "The presentation tier is a Next.js application that serves three kinds of page from "
@@ -605,7 +599,7 @@ ALGO_3_STEPS = [
 ]
 
 CH3_FLOWCHART = [
-    "Figure 3 shows the sequence of operations performed by the system from the moment a "
+    "Figure 4 shows the sequence of operations performed by the system from the moment a "
     "visitor opens a storefront address to the moment an order is confirmed. The chart is "
     "divided into three stages, connected by the numbered off-page connectors.",
 
@@ -632,7 +626,7 @@ CH3_FLOWCHART = [
 ]
 
 CH3_USECASE = [
-    "The use case diagram in Figure 4 shows the interactions between the actors and the "
+    "The use case diagram in Figure 5 shows the interactions between the actors and the "
     "system. Five actors are involved. The platform administrator approves and suspends "
     "stores and monitors platform-wide activity. The store owner creates and configures a "
     "store, maps its subdomain and custom domain, customises the storefront theme, defines "
@@ -643,7 +637,7 @@ CH3_USECASE = [
     "tracks their status. The guest visitor may browse, manage a cart and place an order "
     "without creating an account.",
 
-    "As shown in Figure 4, the system supports 17 primary use cases across five actor "
+    "As shown in Figure 5, the system supports 17 primary use cases across five actor "
     "roles. Registration and authentication is shared between the platform administrator "
     "and the store owner, because both are platform users; storefront customers "
     "authenticate separately through the customer account use case, since customer "
@@ -651,7 +645,7 @@ CH3_USECASE = [
 ]
 
 CH3_DFD0 = [
-    "The context diagram in Figure 5 represents the whole platform as a single process and "
+    "The context diagram in Figure 6 represents the whole platform as a single process and "
     "shows the data that crosses its boundary. Four external entities interact with the "
     "system. The store owner supplies store details, product data, and discount and "
     "shipping rules, and receives the store dashboard, sales reports and order alerts. "
@@ -663,7 +657,7 @@ CH3_DFD0 = [
 ]
 
 CH3_DFD1 = [
-    "Figure 6 decomposes the single process of Figure 5 into six processes and six data "
+    "Figure 7 decomposes the single process of Figure 6 into six processes and six data "
     "stores. Process 1.0, Manage Users and Access, authenticates platform users and issues "
     "session tokens against the user and role store. Process 2.0, Provision Store and "
     "Domain, creates tenant records and domain mappings and applies the administrator's "
@@ -681,7 +675,7 @@ CH3_DFD1 = [
 ]
 
 CH3_ERD = [
-    "The entity relationship diagram in Figure 7 shows the principal entities of the "
+    "The entity relationship diagram in Figure 8 shows the principal entities of the "
     "database, their primary and foreign keys and the cardinality of each relationship. "
     "TENANT is the root of the tenant-owned data: a tenant has many domains, products, "
     "collections, customers, carts, orders, discounts and shipping zones, and every one of "
@@ -699,7 +693,7 @@ CH3_ERD = [
     "storing the unit price agreed at the time. An order also references the address it "
     "ships to, the discount applied and the shipping zone that priced it.",
 
-    "Supporting tables that are not drawn in Figure 7, in order to keep the diagram "
+    "Supporting tables that are not drawn in Figure 8, in order to keep the diagram "
     "legible, are the theme settings of a store, product media assets, shipment tracking "
     "records and the platform-level role definitions. Each follows the same rule as the "
     "entities shown: it carries tenant_id where it is tenant-owned, and its primary key is "
