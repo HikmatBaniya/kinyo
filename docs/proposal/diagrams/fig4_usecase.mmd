@@ -1,0 +1,73 @@
+flowchart LR
+    subgraph LEFT[" "]
+        direction TB
+        ADMIN(["Platform<br/>Administrator"])
+        OWNER(["Store Owner<br/>(Seller)"])
+        STAFF(["Store Staff"])
+    end
+
+    subgraph SYS["Kinyo Multi-Tenant E-Commerce Platform"]
+        direction LR
+        subgraph SG1[" "]
+            direction TB
+            U1(["Register and<br/>authenticate"])
+            U2(["Create and<br/>configure store"])
+            U3(["Map subdomain and<br/>custom domain"])
+            U4(["Customise<br/>storefront theme"])
+            U15(["Approve or<br/>suspend stores"])
+            U16(["Monitor platform<br/>wide activity"])
+        end
+        subgraph SG2[" "]
+            direction TB
+            U5(["Manage product<br/>catalog and variants"])
+            U6(["Manage inventory<br/>levels"])
+            U7(["Manage discounts<br/>and shipping zones"])
+            U8(["Manage staff<br/>and roles"])
+            U13(["Process and<br/>fulfil orders"])
+            U14(["View sales<br/>reports"])
+        end
+        subgraph SG3[" "]
+            direction TB
+            U9(["Browse storefront<br/>and search products"])
+            U10(["Manage shopping<br/>cart"])
+            U11(["Place order<br/>(cash on delivery)"])
+            U12(["Track order<br/>status"])
+        end
+    end
+
+    subgraph RIGHT[" "]
+        direction TB
+        CUST(["Registered<br/>Customer"])
+        GUEST(["Guest<br/>Visitor"])
+    end
+
+    ADMIN --- U1
+    ADMIN --- U15
+    ADMIN --- U16
+    OWNER --- U2
+    OWNER --- U3
+    OWNER --- U4
+    OWNER --- U7
+    OWNER --- U8
+    OWNER --- U14
+    STAFF --- U5
+    STAFF --- U6
+    STAFF --- U13
+    U9 --- CUST
+    U10 --- CUST
+    U11 --- CUST
+    U12 --- CUST
+    U9 --- GUEST
+    U10 --- GUEST
+    U11 --- GUEST
+
+    classDef actor fill:#f6f2e8,stroke:#8a7333,stroke-width:1.5px,color:#2a2413;
+    classDef uc fill:#eef4fb,stroke:#3b6ea5,color:#12263a;
+    classDef invis fill:none,stroke:none;
+    class ADMIN,OWNER,STAFF,CUST,GUEST actor;
+    class U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16 uc;
+    style LEFT fill:none,stroke:none
+    style RIGHT fill:none,stroke:none
+    style SG1 fill:none,stroke:none
+    style SG2 fill:none,stroke:none
+    style SG3 fill:none,stroke:none

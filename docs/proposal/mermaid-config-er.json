@@ -1,0 +1,13 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Times New Roman, Georgia, serif",
+    "fontSize": "16px",
+    "primaryColor": "#eef4fb",
+    "primaryTextColor": "#12263a",
+    "primaryBorderColor": "#3b6ea5",
+    "lineColor": "#4a4a4a",
+    "textColor": "#12263a"
+  },
+  "er": { "layoutDirection": "TB", "entityPadding": 8, "fontSize": 16, "useMaxWidth": false, "minEntityWidth": 110, "diagramPadding": 12 }
+}

@@ -1,0 +1,63 @@
+flowchart TB
+    E1["Store Owner"]
+    E2["Store Staff"]
+    E3["Customer"]
+    E4["Platform<br/>Administrator"]
+
+    P1(("1.0<br/>Manage Users<br/>and Access"))
+    P2(("2.0<br/>Provision Store<br/>and Domain"))
+    P3(("3.0<br/>Manage Catalog<br/>and Inventory"))
+    P4(("4.0<br/>Serve Storefront<br/>and Cart"))
+    P5(("5.0<br/>Process Order"))
+    P6(("6.0<br/>Generate<br/>Reports"))
+
+    D1[("D1  User and Role Store")]
+    D2[("D2  Tenant and Domain Store")]
+    D3[("D3  Product and Inventory Store")]
+    D4[("D4  Cart Store")]
+    D5[("D5  Order Store")]
+    D6[("D6  Customer Store")]
+
+    E1 -- "credentials" --> P1
+    E2 -- "credentials" --> P1
+    E4 -- "credentials" --> P1
+    P1 <-- "user and role records" --> D1
+    P1 -- "session token" --> E1
+
+    E1 -- "store profile,<br/>domain request" --> P2
+    P2 <-- "tenant and domain records" --> D2
+    P2 -- "store status" --> E1
+    E4 -- "approval decision" --> P2
+
+    E1 -- "product and<br/>pricing data" --> P3
+    E2 -- "stock adjustments" --> P3
+    P3 <-- "product, variant and<br/>stock records" --> D3
+    P3 -- "catalog confirmation" --> E1
+
+    E3 -- "browse and<br/>cart actions" --> P4
+    P4 -- "tenant lookup" --> D2
+    P4 -- "product lookup" --> D3
+    P4 <-- "cart records" --> D4
+    P4 -- "product listing,<br/>cart summary" --> E3
+
+    E3 -- "checkout details" --> P5
+    P5 -- "cart contents" --> D4
+    P5 -- "stock reservation" --> D3
+    P5 <-- "order records" --> D5
+    P5 <-- "customer records" --> D6
+    P5 -- "order confirmation" --> E3
+    P5 -- "new order alert" --> E1
+    E2 -- "fulfilment update" --> P5
+    P5 -- "order status" --> E3
+
+    P6 -- "order history" --> D5
+    P6 -- "catalog data" --> D3
+    P6 -- "sales report" --> E1
+    P6 -- "platform summary" --> E4
+
+    classDef ext fill:#f6f2e8,stroke:#8a7333,color:#2a2413;
+    classDef proc fill:#eef4fb,stroke:#3b6ea5,color:#12263a;
+    classDef store fill:#eaf5ee,stroke:#3f7d54,color:#122a1b;
+    class E1,E2,E3,E4 ext;
+    class P1,P2,P3,P4,P5,P6 proc;
+    class D1,D2,D3,D4,D5,D6 store;

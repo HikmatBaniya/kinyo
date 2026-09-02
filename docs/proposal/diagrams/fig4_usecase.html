@@ -1,0 +1,148 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; background: #fff; }
+  #figure { width: 940px; background: #fff; }
+  text { font-family: "Times New Roman", Georgia, serif; fill: #12263a; }
+  .uc { font-size: 19px; text-anchor: middle; }
+  .actor-label { font-size: 19px; font-weight: bold; text-anchor: middle; fill: #2a2413; }
+  .sys-label { font-size: 22px; font-weight: bold; text-anchor: middle; fill: #12263a; }
+  ellipse.uc-shape { fill: #eef4fb; stroke: #3b6ea5; stroke-width: 1.4; }
+  .sys-box { fill: none; stroke: #4a4a4a; stroke-width: 1.6; }
+  .assoc { stroke: #5a5a5a; stroke-width: 1.1; fill: none; }
+  .stick { stroke: #8a7333; stroke-width: 1.8; fill: none; }
+  .stick-head { stroke: #8a7333; stroke-width: 1.8; fill: #f6f2e8; }
+</style>
+<div id="figure">
+<svg width="940" height="770" viewBox="0 0 940 770" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- system boundary -->
+  <rect class="sys-box" x="218" y="30" width="504" height="700" rx="4"/>
+  <text class="sys-label" x="470" y="57">Kinyo Multi-Tenant E-Commerce Platform</text>
+
+  <!-- ============ associations (drawn first, under shapes) ============ -->
+  <g class="assoc">
+    <!-- Platform Administrator (138,190) -> col A rows 1-3 -->
+    <path d="M138 180 L238 100"/>
+    <path d="M138 182 L238 172"/>
+    <path d="M138 186 L238 244"/>
+    <!-- Store Owner (138,500) -> col A rows 3-9 -->
+    <path d="M138 490 L238 244"/>
+    <path d="M138 491 L238 316"/>
+    <path d="M138 492 L238 388"/>
+    <path d="M138 494 L238 460"/>
+    <path d="M138 496 L238 532"/>
+    <path d="M138 498 L238 604"/>
+    <path d="M138 500 L238 676"/>
+    <!-- Registered Customer (802,180) -> col B rows 1-5 -->
+    <path d="M802 172 L702 118"/>
+    <path d="M802 174 L702 194"/>
+    <path d="M802 176 L702 270"/>
+    <path d="M802 178 L702 346"/>
+    <path d="M802 180 L702 422"/>
+    <!-- Guest Visitor (802,330) -> col B rows 2-4 -->
+    <path d="M802 322 L702 194"/>
+    <path d="M802 324 L702 270"/>
+    <path d="M802 326 L702 346"/>
+    <!-- Store Staff (802,600) -> col B rows 6-8 -->
+    <path d="M802 592 L702 498"/>
+    <path d="M802 594 L702 574"/>
+    <path d="M802 596 L702 650"/>
+  </g>
+
+  <!-- ============ use cases, column A (x = 350) ============ -->
+  <g>
+    <ellipse class="uc-shape" cx="350" cy="100" rx="112" ry="34"/>
+    <text class="uc" x="350" y="96">Approve or</text><text class="uc" x="350" y="112">suspend stores</text>
+
+    <ellipse class="uc-shape" cx="350" cy="172" rx="112" ry="34"/>
+    <text class="uc" x="350" y="168">Monitor platform-</text><text class="uc" x="350" y="184">wide activity</text>
+
+    <ellipse class="uc-shape" cx="350" cy="244" rx="112" ry="34"/>
+    <text class="uc" x="350" y="240">Register and</text><text class="uc" x="350" y="256">authenticate</text>
+
+    <ellipse class="uc-shape" cx="350" cy="316" rx="112" ry="34"/>
+    <text class="uc" x="350" y="312">Create and</text><text class="uc" x="350" y="328">configure store</text>
+
+    <ellipse class="uc-shape" cx="350" cy="388" rx="112" ry="34"/>
+    <text class="uc" x="350" y="384">Map subdomain and</text><text class="uc" x="350" y="400">custom domain</text>
+
+    <ellipse class="uc-shape" cx="350" cy="460" rx="112" ry="34"/>
+    <text class="uc" x="350" y="456">Customise</text><text class="uc" x="350" y="472">storefront theme</text>
+
+    <ellipse class="uc-shape" cx="350" cy="532" rx="112" ry="34"/>
+    <text class="uc" x="350" y="528">Manage staff</text><text class="uc" x="350" y="544">and roles</text>
+
+    <ellipse class="uc-shape" cx="350" cy="604" rx="112" ry="34"/>
+    <text class="uc" x="350" y="600">Manage discounts</text><text class="uc" x="350" y="616">and shipping zones</text>
+
+    <ellipse class="uc-shape" cx="350" cy="676" rx="112" ry="34"/>
+    <text class="uc" x="350" y="672">View sales</text><text class="uc" x="350" y="688">reports</text>
+  </g>
+
+  <!-- ============ use cases, column B (x = 590) ============ -->
+  <g>
+    <ellipse class="uc-shape" cx="590" cy="118" rx="112" ry="34"/>
+    <text class="uc" x="590" y="114">Create customer</text><text class="uc" x="590" y="130">account</text>
+
+    <ellipse class="uc-shape" cx="590" cy="194" rx="112" ry="34"/>
+    <text class="uc" x="590" y="190">Browse storefront</text><text class="uc" x="590" y="206">and search products</text>
+
+    <ellipse class="uc-shape" cx="590" cy="270" rx="112" ry="34"/>
+    <text class="uc" x="590" y="266">Manage shopping</text><text class="uc" x="590" y="282">cart</text>
+
+    <ellipse class="uc-shape" cx="590" cy="346" rx="112" ry="34"/>
+    <text class="uc" x="590" y="342">Place order</text><text class="uc" x="590" y="358">(cash on delivery)</text>
+
+    <ellipse class="uc-shape" cx="590" cy="422" rx="112" ry="34"/>
+    <text class="uc" x="590" y="418">Track order</text><text class="uc" x="590" y="434">status</text>
+
+    <ellipse class="uc-shape" cx="590" cy="498" rx="112" ry="34"/>
+    <text class="uc" x="590" y="494">Manage product</text><text class="uc" x="590" y="510">catalog and variants</text>
+
+    <ellipse class="uc-shape" cx="590" cy="574" rx="112" ry="34"/>
+    <text class="uc" x="590" y="570">Manage inventory</text><text class="uc" x="590" y="586">levels</text>
+
+    <ellipse class="uc-shape" cx="590" cy="650" rx="112" ry="34"/>
+    <text class="uc" x="590" y="646">Process and</text><text class="uc" x="590" y="662">fulfil orders</text>
+  </g>
+
+  <!-- ============ actors ============ -->
+  <!-- left: Platform Administrator @ (110,190) -->
+  <g>
+    <circle class="stick-head" cx="110" cy="156" r="11"/>
+    <path class="stick" d="M110 167 L110 196 M94 178 L126 178 M110 196 L97 218 M110 196 L123 218"/>
+    <text class="actor-label" x="110" y="238">Platform</text>
+    <text class="actor-label" x="110" y="254">Administrator</text>
+  </g>
+  <!-- left: Store Owner @ (110,500) -->
+  <g>
+    <circle class="stick-head" cx="110" cy="466" r="11"/>
+    <path class="stick" d="M110 477 L110 506 M94 488 L126 488 M110 506 L97 528 M110 506 L123 528"/>
+    <text class="actor-label" x="110" y="548">Store Owner</text>
+    <text class="actor-label" x="110" y="564">(Seller)</text>
+  </g>
+  <!-- right: Registered Customer @ (830,180) -->
+  <g>
+    <circle class="stick-head" cx="830" cy="146" r="11"/>
+    <path class="stick" d="M830 157 L830 186 M814 168 L846 168 M830 186 L817 208 M830 186 L843 208"/>
+    <text class="actor-label" x="830" y="228">Registered</text>
+    <text class="actor-label" x="830" y="244">Customer</text>
+  </g>
+  <!-- right: Guest Visitor @ (830,330) -->
+  <g>
+    <circle class="stick-head" cx="830" cy="296" r="11"/>
+    <path class="stick" d="M830 307 L830 336 M814 318 L846 318 M830 336 L817 358 M830 336 L843 358"/>
+    <text class="actor-label" x="830" y="378">Guest</text>
+    <text class="actor-label" x="830" y="394">Visitor</text>
+  </g>
+  <!-- right: Store Staff @ (830,600) -->
+  <g>
+    <circle class="stick-head" cx="830" cy="566" r="11"/>
+    <path class="stick" d="M830 577 L830 606 M814 588 L846 588 M830 606 L817 628 M830 606 L843 628"/>
+    <text class="actor-label" x="830" y="648">Store</text>
+    <text class="actor-label" x="830" y="664">Staff</text>
+  </g>
+
+</svg>
+</div>

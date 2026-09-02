@@ -1,0 +1,25 @@
+flowchart LR
+    subgraph I1["Iteration 1 - Core Platform"]
+        direction TB
+        A1["Requirement<br/>Analysis"] --> B1["Design"] --> C1["Implementation"] --> D1["Testing"] --> E1["Evaluation"]
+    end
+    subgraph I2["Iteration 2 - Catalog and Storefront"]
+        direction TB
+        A2["Requirement<br/>Analysis"] --> B2["Design"] --> C2["Implementation"] --> D2["Testing"] --> E2["Evaluation"]
+    end
+    subgraph I3["Iteration 3 - Cart, Orders and Admin"]
+        direction TB
+        A3["Requirement<br/>Analysis"] --> B3["Design"] --> C3["Implementation"] --> D3["Testing"] --> E3["Evaluation"]
+    end
+
+    P["Project<br/>Initiation"] --> I1
+    E1 -. "feedback" .-> I2
+    I1 --> I2
+    E2 -. "feedback" .-> I3
+    I2 --> I3
+    I3 --> DEP["Deployment and<br/>Documentation"]
+
+    classDef phase fill:#eef4fb,stroke:#3b6ea5,stroke-width:1px,color:#12263a;
+    classDef edgeNode fill:#f6f2e8,stroke:#8a7333,stroke-width:1px,color:#2a2413;
+    class A1,B1,C1,D1,E1,A2,B2,C2,D2,E2,A3,B3,C3,D3,E3 phase;
+    class P,DEP edgeNode;

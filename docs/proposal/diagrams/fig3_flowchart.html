@@ -1,0 +1,198 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; background: #fff; }
+  #figure { width: 1040px; background: #fff; }
+  text { font-family: "Times New Roman", Georgia, serif; fill: #12263a; }
+  .n  { font-size: 21px; text-anchor: middle; }
+  .col-title { font-size: 23px; font-weight: bold; text-anchor: middle; fill: #12263a; }
+  .lbl { font-size: 19px; font-style: italic; fill: #6b3a2e; }
+  .conn-t { font-size: 21px; font-weight: bold; text-anchor: middle; fill: #33121f; }
+  rect.proc { fill: #ffffff; stroke: #4a4a4a; stroke-width: 1.6; }
+  rect.term { fill: #f6f2e8; stroke: #8a7333; stroke-width: 1.8; }
+  polygon.dec { fill: #eef4fb; stroke: #3b6ea5; stroke-width: 1.6; }
+  circle.conn { fill: #f7edf1; stroke: #8f4667; stroke-width: 1.8; }
+  g.flow path { stroke: #4a4a4a; stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+  line.sep { stroke: #c9c9c9; stroke-width: 1.2; stroke-dasharray: 6 5; }
+</style>
+<div id="figure">
+<svg width="1040" height="1270" viewBox="0 0 1040 1270" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a4a4a"/>
+    </marker>
+  </defs>
+
+  <!-- column separators -->
+  <line class="sep" x1="345" y1="60" x2="345" y2="1250"/>
+  <line class="sep" x1="685" y1="60" x2="685" y2="1250"/>
+
+  <text class="col-title" x="160" y="40">Stage A: Store Resolution</text>
+  <text class="col-title" x="160" y="66">and Catalog Browsing</text>
+  <text class="col-title" x="500" y="40">Stage B: Checkout and</text>
+  <text class="col-title" x="500" y="66">Price Calculation</text>
+  <text class="col-title" x="840" y="40">Stage C: Order Creation</text>
+  <text class="col-title" x="840" y="66">and Confirmation</text>
+
+  <!-- ==================== COLUMN A (cx = 160) ==================== -->
+  <rect class="term" x="65" y="122" width="190" height="52" rx="26"/>
+  <text class="n" x="160" y="155">Start</text>
+
+  <rect class="proc" x="65" y="222" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="247">Visitor opens</text><text class="n" x="160" y="271">store URL</text>
+
+  <rect class="proc" x="65" y="330" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="355">Middleware extracts</text><text class="n" x="160" y="379">Host header</text>
+
+  <polygon class="dec" points="160,398 270,462 160,526 50,462"/>
+  <text class="n" x="160" y="455">Domain mapped to</text><text class="n" x="160" y="479">an active store?</text>
+
+  <rect class="proc" x="65" y="562" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="587">Load tenant context</text><text class="n" x="160" y="611">and theme</text>
+
+  <rect class="proc" x="65" y="662" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="687">Render catalog</text><text class="n" x="160" y="711">for tenant_id</text>
+
+  <rect class="proc" x="65" y="762" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="787">Customer adds</text><text class="n" x="160" y="811">item to cart</text>
+
+  <polygon class="dec" points="160,838 270,890 160,942 50,890"/>
+  <text class="n" x="160" y="897">Variant in stock?</text>
+
+  <rect class="proc" x="65" y="978" width="190" height="60" rx="3"/>
+  <text class="n" x="160" y="1003">Add or update</text><text class="n" x="160" y="1027">cart line</text>
+
+  <polygon class="dec" points="160,1054 270,1112 160,1170 50,1112"/>
+  <text class="n" x="160" y="1105">Continue</text><text class="n" x="160" y="1129">shopping?</text>
+
+  <circle class="conn" cx="160" cy="1224" r="24"/>
+  <text class="conn-t" x="160" y="1232">1</text>
+
+  <!-- exit connector 2 (store not found) -->
+  <circle class="conn" cx="312" cy="462" r="24"/>
+  <text class="conn-t" x="312" y="470">2</text>
+  <!-- entry connector 3 (stock conflict returns to catalog) -->
+  <circle class="conn" cx="312" cy="692" r="24"/>
+  <text class="conn-t" x="312" y="700">3</text>
+
+  <!-- column A flow -->
+  <g class="flow">
+    <path d="M160 174 L160 216"/>
+    <path d="M160 282 L160 324"/>
+    <path d="M160 390 L160 392"/>
+    <path d="M270 462 L282 462"/>
+    <path d="M160 526 L160 556"/>
+    <path d="M160 622 L160 656"/>
+    <path d="M160 722 L160 756"/>
+    <path d="M160 822 L160 832"/>
+    <path d="M160 942 L160 972"/>
+    <path d="M160 1038 L160 1048"/>
+    <path d="M160 1170 L160 1196"/>
+    <!-- out of stock: loop back to catalog -->
+    <path d="M50 890 L28 890 L28 700 L59 700"/>
+    <!-- continue shopping = yes: loop back to catalog -->
+    <path d="M50 1112 L14 1112 L14 682 L59 682"/>
+    <!-- connector 3 into catalog -->
+    <path d="M288 692 L261 692"/>
+  </g>
+  <text class="lbl" x="286" y="452">No</text>
+  <text class="lbl" x="168" y="548">Yes</text>
+  <text class="lbl" x="32" y="882">No</text>
+  <text class="lbl" x="168" y="966">Yes</text>
+  <text class="lbl" x="18" y="1104">Yes</text>
+  <text class="lbl" x="168" y="1192">No</text>
+
+  <!-- ==================== COLUMN B (cx = 500) ==================== -->
+  <circle class="conn" cx="500" cy="146" r="24"/>
+  <text class="conn-t" x="500" y="154">1</text>
+
+  <rect class="proc" x="405" y="212" width="190" height="52" rx="3"/>
+  <text class="n" x="500" y="244">Open checkout</text>
+
+  <polygon class="dec" points="500,292 610,350 500,408 390,350"/>
+  <text class="n" x="500" y="343">Customer</text><text class="n" x="500" y="367">authenticated?</text>
+
+  <rect class="proc" x="405" y="444" width="190" height="60" rx="3"/>
+  <text class="n" x="500" y="469">Collect guest</text><text class="n" x="500" y="493">contact details</text>
+
+  <rect class="proc" x="405" y="544" width="190" height="60" rx="3"/>
+  <text class="n" x="500" y="569">Collect shipping</text><text class="n" x="500" y="593">address</text>
+
+  <rect class="proc" x="405" y="644" width="190" height="84" rx="3"/>
+  <text class="n" x="500" y="669">Calculate subtotal,</text><text class="n" x="500" y="693">discount, shipping</text><text class="n" x="500" y="717">and total</text>
+
+  <polygon class="dec" points="500,756 610,814 500,872 390,814"/>
+  <text class="n" x="500" y="807">Discount code</text><text class="n" x="500" y="831">valid?</text>
+
+  <rect class="proc" x="405" y="908" width="190" height="60" rx="3"/>
+  <text class="n" x="500" y="933">Reject code and</text><text class="n" x="500" y="957">recalculate total</text>
+
+  <rect class="proc" x="405" y="1008" width="190" height="60" rx="3"/>
+  <text class="n" x="500" y="1033">Confirm order</text><text class="n" x="500" y="1057">summary</text>
+
+  <circle class="conn" cx="500" cy="1124" r="24"/>
+  <text class="conn-t" x="500" y="1132">4</text>
+
+  <g class="flow">
+    <path d="M500 170 L500 206"/>
+    <path d="M500 264 L500 286"/>
+    <path d="M500 408 L500 438"/>
+    <path d="M500 504 L500 538"/>
+    <path d="M500 604 L500 638"/>
+    <path d="M500 728 L500 750"/>
+    <path d="M500 872 L500 902"/>
+    <path d="M500 968 L500 1002"/>
+    <path d="M500 1068 L500 1096"/>
+    <!-- authenticated = yes: bypass guest details -->
+    <path d="M610 350 L648 350 L648 524 L599 524 L599 538"/>
+    <!-- discount valid = yes: bypass rejection -->
+    <path d="M610 814 L656 814 L656 1000 L599 1000 L599 1002"/>
+  </g>
+  <text class="lbl" x="378" y="404">No</text>
+  <text class="lbl" x="614" y="342">Yes</text>
+  <text class="lbl" x="378" y="868">No</text>
+  <text class="lbl" x="614" y="806">Yes</text>
+
+  <!-- ==================== COLUMN C (cx = 840) ==================== -->
+  <circle class="conn" cx="840" cy="146" r="24"/>
+  <text class="conn-t" x="840" y="154">4</text>
+
+  <polygon class="dec" points="840,214 950,272 840,330 730,272"/>
+  <text class="n" x="840" y="265">Stock still</text><text class="n" x="840" y="289">available?</text>
+
+  <circle class="conn" cx="1004" cy="272" r="24"/>
+  <text class="conn-t" x="1004" y="280">3</text>
+
+  <rect class="proc" x="745" y="376" width="190" height="60" rx="3"/>
+  <text class="n" x="840" y="401">Create order and</text><text class="n" x="840" y="425">reserve inventory</text>
+
+  <rect class="proc" x="745" y="486" width="190" height="60" rx="3"/>
+  <text class="n" x="840" y="511">Set payment method</text><text class="n" x="840" y="535">to cash on delivery</text>
+
+  <rect class="proc" x="745" y="596" width="190" height="60" rx="3"/>
+  <text class="n" x="840" y="621">Notify seller</text><text class="n" x="840" y="645">and customer</text>
+
+  <rect class="proc" x="745" y="706" width="190" height="60" rx="3"/>
+  <text class="n" x="840" y="731">Display order</text><text class="n" x="840" y="755">confirmation</text>
+
+  <rect class="term" x="745" y="822" width="190" height="52" rx="26"/>
+  <text class="n" x="840" y="855">End</text>
+
+  <circle class="conn" cx="1004" cy="848" r="24"/>
+  <text class="conn-t" x="1004" y="856">2</text>
+
+  <g class="flow">
+    <path d="M840 170 L840 208"/>
+    <path d="M950 272 L974 272"/>
+    <path d="M840 330 L840 370"/>
+    <path d="M840 436 L840 480"/>
+    <path d="M840 546 L840 590"/>
+    <path d="M840 656 L840 700"/>
+    <path d="M840 766 L840 816"/>
+    <path d="M980 848 L941 848"/>
+  </g>
+  <text class="lbl" x="956" y="262">No</text>
+  <text class="lbl" x="848" y="362">Yes</text>
+
+</svg>
+</div>

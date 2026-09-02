@@ -1,0 +1,24 @@
+flowchart LR
+    E1["Store Owner"]
+    E2["Store Staff"]
+    E3["Customer"]
+    E4["Platform<br/>Administrator"]
+
+    P0(("0<br/>Kinyo<br/>Multi-Tenant<br/>E-Commerce<br/>Platform"))
+
+    E1 -- "store details, product data,<br/>discount and shipping rules" --> P0
+    P0 -- "store dashboard, sales reports,<br/>order notifications" --> E1
+
+    E2 -- "stock updates,<br/>fulfilment status" --> P0
+    P0 -- "order queue,<br/>inventory alerts" --> E2
+
+    E3 -- "search terms, cart items,<br/>order and address details" --> P0
+    P0 -- "product listings, cart summary,<br/>order confirmation and status" --> E3
+
+    E4 -- "store approval decisions,<br/>platform settings" --> P0
+    P0 -- "store registry,<br/>platform activity summary" --> E4
+
+    classDef ext fill:#f6f2e8,stroke:#8a7333,stroke-width:1.5px,color:#2a2413;
+    classDef proc fill:#eef4fb,stroke:#3b6ea5,stroke-width:1.5px,color:#12263a;
+    class E1,E2,E3,E4 ext;
+    class P0 proc;

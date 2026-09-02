@@ -1,0 +1,157 @@
+erDiagram
+    USER ||--o{ MEMBERSHIP : holds
+    TENANT ||--o{ MEMBERSHIP : grants
+    ROLE ||--o{ MEMBERSHIP : defines
+    TENANT ||--o{ DOMAIN : "reached via"
+    TENANT ||--|| THEME_SETTING : styles
+    TENANT ||--o{ PRODUCT : owns
+    TENANT ||--o{ COLLECTION : owns
+    TENANT ||--o{ CUSTOMER : owns
+    TENANT ||--o{ CART : owns
+    TENANT ||--o{ ORDERS : owns
+    TENANT ||--o{ DISCOUNT : owns
+    TENANT ||--o{ SHIPPING_ZONE : owns
+    PRODUCT ||--o{ PRODUCT_VARIANT : "sold as"
+    PRODUCT ||--o{ MEDIA_ASSET : "shown by"
+    PRODUCT ||--o{ PRODUCT_COLLECTION : "listed in"
+    COLLECTION ||--o{ PRODUCT_COLLECTION : groups
+    PRODUCT_VARIANT ||--|| INVENTORY_ITEM : "stocked as"
+    PRODUCT_VARIANT ||--o{ CART_ITEM : "chosen in"
+    PRODUCT_VARIANT ||--o{ ORDER_ITEM : "sold in"
+    CUSTOMER ||--o{ ADDRESS : saves
+    CUSTOMER ||--o{ CART : owns
+    CUSTOMER ||--o{ ORDERS : places
+    CART ||--o{ CART_ITEM : contains
+    ORDERS ||--o{ ORDER_ITEM : contains
+    ORDERS ||--o{ SHIPMENT : "shipped by"
+    ADDRESS ||--o{ ORDERS : "ships to"
+    DISCOUNT ||--o{ ORDERS : reduces
+    SHIPPING_ZONE ||--o{ SHIPPING_RATE : offers
+    SHIPPING_RATE ||--o{ ORDERS : prices
+
+    USER {
+        uuid id PK
+        str email UK
+        str password_hash
+        bool is_platform_admin
+    }
+    TENANT {
+        uuid id PK
+        str name
+        str slug UK
+        str status
+    }
+    ROLE {
+        uuid id PK
+        str name UK
+        json permissions
+    }
+    MEMBERSHIP {
+        uuid id PK
+        uuid user_id FK
+        uuid tenant_id FK
+        uuid role_id FK
+    }
+    DOMAIN {
+        uuid id PK
+        uuid tenant_id FK
+        str hostname UK
+        bool is_primary
+    }
+    THEME_SETTING {
+        uuid id PK
+        uuid tenant_id FK
+        str template
+    }
+    PRODUCT {
+        uuid id PK
+        uuid tenant_id FK
+        str title
+        str status
+    }
+    PRODUCT_VARIANT {
+        uuid id PK
+        uuid product_id FK
+        str sku UK
+        dec price
+    }
+    INVENTORY_ITEM {
+        uuid id PK
+        uuid variant_id FK
+        int qty_on_hand
+        int qty_reserved
+    }
+    COLLECTION {
+        uuid id PK
+        uuid tenant_id FK
+        str title
+    }
+    PRODUCT_COLLECTION {
+        uuid product_id FK
+        uuid collection_id FK
+    }
+    MEDIA_ASSET {
+        uuid id PK
+        uuid product_id FK
+        str url
+    }
+    CUSTOMER {
+        uuid id PK
+        uuid tenant_id FK
+        str email
+        str phone
+    }
+    ADDRESS {
+        uuid id PK
+        uuid customer_id FK
+        str city
+        str province
+    }
+    CART {
+        uuid id PK
+        uuid tenant_id FK
+        uuid customer_id FK
+    }
+    CART_ITEM {
+        uuid id PK
+        uuid cart_id FK
+        uuid variant_id FK
+        int quantity
+    }
+    ORDERS {
+        uuid id PK
+        uuid tenant_id FK
+        uuid customer_id FK
+        uuid address_id FK
+        uuid discount_id FK
+        str order_number UK
+        str status
+        dec total
+    }
+    ORDER_ITEM {
+        uuid id PK
+        uuid order_id FK
+        uuid variant_id FK
+        int quantity
+    }
+    SHIPMENT {
+        uuid id PK
+        uuid order_id FK
+        str status
+    }
+    DISCOUNT {
+        uuid id PK
+        uuid tenant_id FK
+        str code UK
+        dec value
+    }
+    SHIPPING_ZONE {
+        uuid id PK
+        uuid tenant_id FK
+        str name
+    }
+    SHIPPING_RATE {
+        uuid id PK
+        uuid zone_id FK
+        dec price
+    }

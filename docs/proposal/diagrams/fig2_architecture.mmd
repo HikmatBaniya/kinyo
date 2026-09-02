@@ -1,0 +1,59 @@
+flowchart TB
+    subgraph CL["Client Layer"]
+        direction LR
+        C1["Customer Browser<br/>store.kinyo.com"]
+        C2["Seller Browser<br/>app.kinyo.com"]
+        C3["Platform Admin<br/>Browser"]
+    end
+
+    subgraph PL["Presentation Layer - Next.js"]
+        direction TB
+        MW["Tenant Resolution Middleware<br/>reads Host header"]
+        SF["Storefront Pages<br/>server-rendered"]
+        DB1["Seller Dashboard"]
+        AD["Platform Admin Console"]
+        MW --> SF
+        MW --> DB1
+        MW --> AD
+    end
+
+    subgraph AL["Application Layer - FastAPI"]
+        direction TB
+        AUTH["Authentication and<br/>RBAC Service"]
+        TEN["Tenant and Domain<br/>Service"]
+        CAT["Catalog and<br/>Inventory Service"]
+        ORD["Cart and Order<br/>Service"]
+        RPT["Reporting Service"]
+        ORM["SQLAlchemy ORM +<br/>Tenant Scoping Layer"]
+        AUTH --> ORM
+        TEN --> ORM
+        CAT --> ORM
+        ORD --> ORM
+        RPT --> ORM
+    end
+
+    subgraph DL["Data Layer"]
+        direction LR
+        PG[("PostgreSQL<br/>shared database<br/>tenant_id on every<br/>tenant-owned table")]
+        RD[("Redis<br/>cache and sessions")]
+        S3[("Object Storage<br/>product media")]
+    end
+
+    C1 --> MW
+    C2 --> MW
+    C3 --> MW
+    SF -- "HTTPS / REST" --> AUTH
+    DB1 -- "HTTPS / REST" --> AUTH
+    AD -- "HTTPS / REST" --> AUTH
+    ORM --> PG
+    AL --> RD
+    PL --> S3
+
+    classDef client fill:#f6f2e8,stroke:#8a7333,color:#2a2413;
+    classDef pres fill:#eef4fb,stroke:#3b6ea5,color:#12263a;
+    classDef app fill:#eaf5ee,stroke:#3f7d54,color:#122a1b;
+    classDef data fill:#f7edf1,stroke:#8f4667,color:#33121f;
+    class C1,C2,C3 client;
+    class MW,SF,DB1,AD pres;
+    class AUTH,TEN,CAT,ORD,RPT,ORM app;
+    class PG,RD,S3 data;
