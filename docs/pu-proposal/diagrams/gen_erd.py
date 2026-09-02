@@ -25,6 +25,11 @@ CANVAS_W = 1500
 CANVAS_H = 1930
 
 # name, column, row, [(type, attribute, key), ...]
+#
+# The grid is arranged so that related entities sit next to each other: the
+# catalogue runs down the right column, the customer and order path down the
+# left, and the line-item tables sit between them. That keeps almost every
+# relationship between adjacent boxes instead of routing it across the figure.
 ENTITIES = [
     ("USER", 0, 0, [
         ("uuid", "id", "PK"), ("str", "email", "UK"),
@@ -36,35 +41,35 @@ ENTITIES = [
         ("uuid", "id", "PK"), ("str", "name", ""),
         ("str", "slug", "UK"), ("str", "status", "")]),
 
-    ("PRODUCT", 0, 1, [
+    ("DOMAIN", 0, 1, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
-        ("str", "title", ""), ("str", "status", "")]),
+        ("str", "hostname", "UK"), ("bool", "is_primary", "")]),
     ("COLLECTION", 1, 1, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("str", "title", "")]),
-    ("DOMAIN", 2, 1, [
+    ("PRODUCT", 2, 1, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
-        ("str", "hostname", "UK"), ("bool", "is_primary", "")]),
+        ("str", "title", ""), ("str", "status", "")]),
 
-    ("PRODUCT_VARIANT", 0, 2, [
-        ("uuid", "id", "PK"), ("uuid", "product_id", "FK"),
-        ("str", "sku", "UK"), ("dec", "price", "")]),
-    ("CUSTOMER", 1, 2, [
+    ("CUSTOMER", 0, 2, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("str", "email", ""), ("str", "phone", "")]),
-    ("ADDRESS", 2, 2, [
-        ("uuid", "id", "PK"), ("uuid", "customer_id", "FK"),
-        ("str", "city", ""), ("str", "province", "")]),
-
-    ("INVENTORY_ITEM", 0, 3, [
-        ("uuid", "id", "PK"), ("uuid", "variant_id", "FK"),
-        ("int", "qty_on_hand", ""), ("int", "qty_reserved", "")]),
-    ("CART", 1, 3, [
+    ("CART", 1, 2, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("uuid", "customer_id", "FK")]),
-    ("CART_ITEM", 2, 3, [
+    ("PRODUCT_VARIANT", 2, 2, [
+        ("uuid", "id", "PK"), ("uuid", "product_id", "FK"),
+        ("str", "sku", "UK"), ("dec", "price", "")]),
+
+    ("ADDRESS", 0, 3, [
+        ("uuid", "id", "PK"), ("uuid", "customer_id", "FK"),
+        ("str", "city", ""), ("str", "province", "")]),
+    ("CART_ITEM", 1, 3, [
         ("uuid", "id", "PK"), ("uuid", "cart_id", "FK"),
         ("uuid", "variant_id", "FK"), ("int", "quantity", "")]),
+    ("INVENTORY_ITEM", 2, 3, [
+        ("uuid", "id", "PK"), ("uuid", "variant_id", "FK"),
+        ("int", "qty_on_hand", ""), ("int", "qty_reserved", "")]),
 
     ("DISCOUNT", 0, 4, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
@@ -78,7 +83,7 @@ ENTITIES = [
         ("uuid", "id", "PK"), ("uuid", "order_id", "FK"),
         ("uuid", "variant_id", "FK"), ("int", "quantity", "")]),
 
-    ("SHIPPING_ZONE", 0, 5, [
+    ("SHIPPING_ZONE", 1, 5, [
         ("uuid", "id", "PK"), ("uuid", "tenant_id", "FK"),
         ("str", "name", ""), ("dec", "base_rate", "")]),
 ]
@@ -153,57 +158,60 @@ def hrel(a, b, y, ms, me, label, side="right"):
 
 
 # --- identity and tenancy -------------------------------------------------
-hrel("USER", "MEMBERSHIP", 150, "one", "many", "holds")
-hrel("TENANT", "MEMBERSHIP", 200, "one", "many", "grants", side="left")
-rel([B("TENANT", 0.5), T("DOMAIN", 0.5)], "one", "many", "has",
-    COL_CX[2] + 16, 315, "start")
+hrel("USER", "MEMBERSHIP", 170, "one", "many", "holds")
+hrel("TENANT", "MEMBERSHIP", 220, "one", "many", "grants", side="left")
 
-rel([B("TENANT", 0.14), (B("TENANT", 0.14)[0], 290),
-     (T("PRODUCT", 0.5)[0], 290), T("PRODUCT", 0.5)],
-    "one", "many", "owns", 420, 278)
-rel([B("TENANT", 0.3), (B("TENANT", 0.3)[0], 322),
-     (T("COLLECTION", 0.62)[0], 322), T("COLLECTION", 0.62)],
-    "one", "many", "owns", 900, 310)
-rel([R("TENANT", 0.7), (RIGHT_CH, R("TENANT", 0.7)[1]),
-     (RIGHT_CH, 600), (T("CUSTOMER", 0.8)[0], 600), T("CUSTOMER", 0.8)],
-    "one", "many", "owns", 1180, 588)
+rel([B("TENANT", 0.5), T("PRODUCT", 0.5)], "one", "many",
+    "owns", COL_CX[2] + 16, 315, "start")
+rel([B("TENANT", 0.24), (B("TENANT", 0.24)[0], 312),
+     (T("COLLECTION", 0.62)[0], 312), T("COLLECTION", 0.62)],
+    "one", "many", "owns", 1000, 300)
+rel([B("TENANT", 0.1), (B("TENANT", 0.1)[0], 286),
+     (T("DOMAIN", 0.5)[0], 286), T("DOMAIN", 0.5)],
+    "one", "many", "has", 560, 274)
+
+CH_L = vchan(0)
+rel([B("TENANT", 0.06), (B("TENANT", 0.06)[0], 336), (CH_L, 336),
+     (CH_L, 604), (T("CUSTOMER", 0.75)[0], 604), T("CUSTOMER", 0.75)],
+    "one", "many", "owns", CH_L + 12, 470, "start")
 
 # --- catalogue ------------------------------------------------------------
-hrel("PRODUCT", "COLLECTION", 470, "many", "many", "grouped in")
+hrel("COLLECTION", "PRODUCT", 470, "many", "many", "grouped in")
 rel([B("PRODUCT", 0.4), T("PRODUCT_VARIANT", 0.4)], "one", "many",
-    "sold as", 205, 610, "end")
+    "sold as", COL_CX[2] - 205, 610, "end")
 rel([B("PRODUCT_VARIANT", 0.4), T("INVENTORY_ITEM", 0.4)], "one", "one",
-    "stocked as", 205, 900, "end")
+    "stocked as", COL_CX[2] - 25, 940, "start")
 
 rel([B("PRODUCT_VARIANT", 0.78), (B("PRODUCT_VARIANT", 0.78)[0], 890),
-     (T("CART_ITEM", 0.45)[0], 890), T("CART_ITEM", 0.45)],
-    "one", "many", "chosen in", 800, 878)
+     (T("CART_ITEM", 0.72)[0], 890), T("CART_ITEM", 0.72)],
+    "one", "many", "chosen in", 900, 878)
+
+CH_R = RIGHT_CH
+rel([R("PRODUCT_VARIANT", 0.62), (CH_R, R("PRODUCT_VARIANT", 0.62)[1]),
+     (CH_R, 1186), (T("ORDER_ITEM", 0.78)[0], 1186), T("ORDER_ITEM", 0.78)],
+    "one", "many", "sold in", CH_R - 12, 1174, "end")
 
 # --- customers, carts -----------------------------------------------------
-hrel("CUSTOMER", "ADDRESS", 740, "one", "many", "saves")
-rel([B("CUSTOMER", 0.4), T("CART", 0.4)], "one", "many",
-    "owns", COL_CX[1] + 16, 928, "start")
-hrel("CART", "CART_ITEM", 1030, "one", "many", "contains")
+hrel("CUSTOMER", "CART", 760, "one", "many", "owns")
+rel([B("CUSTOMER", 0.35), T("ADDRESS", 0.35)], "one", "many",
+    "saves", COL_CX[0] - 40, 900, "start")
+rel([B("CART", 0.5), T("CART_ITEM", 0.5)], "one", "many",
+    "contains", COL_CX[1] + 16, 946, "start")
 
 # --- orders ---------------------------------------------------------------
-rel([L("CUSTOMER", 0.72), (vchan(0), L("CUSTOMER", 0.72)[1]),
-     (vchan(0), 1300), L("ORDERS", 0.21)],
-    "one", "many", "places", vchan(0) - 12, 1150, "end")
+rel([L("CUSTOMER", 0.62), (LEFT_CH, L("CUSTOMER", 0.62)[1]),
+     (LEFT_CH, 1500), (BOX["ORDERS"]["x"], 1500)],
+    "one", "many", "places", LEFT_CH + 34, 1478, "start")
 
-rel([L("ADDRESS", 0.62), (vchan(1), L("ADDRESS", 0.62)[1]),
-     (vchan(1), 1180), (T("ORDERS", 0.72)[0], 1180), T("ORDERS", 0.72)],
-    "one", "many", "ships to", 1010, 1168)
+rel([R("ADDRESS", 0.6), (CH_L, R("ADDRESS", 0.6)[1]),
+     (CH_L, 1190), (T("ORDERS", 0.25)[0], 1190), T("ORDERS", 0.25)],
+    "one", "many", "ships to", CH_L + 12, 1178, "start")
 
 hrel("DISCOUNT", "ORDERS", 1330, "one", "many", "reduces")
 hrel("ORDERS", "ORDER_ITEM", 1330, "one", "many", "contains")
 
-rel([L("PRODUCT_VARIANT", 0.82), (LEFT_CH, L("PRODUCT_VARIANT", 0.82)[1]),
-     (LEFT_CH, 1640), (B("ORDER_ITEM", 0.5)[0], 1640), B("ORDER_ITEM", 0.5)],
-    "one", "many", "sold in", 700, 1628)
-
-rel([T("SHIPPING_ZONE", 0.62), (T("SHIPPING_ZONE", 0.62)[0], 1608),
-     (B("ORDERS", 0.4)[0], 1608), B("ORDERS", 0.4)],
-    "one", "many", "prices", 560, 1596)
+rel([T("SHIPPING_ZONE", 0.5), B("ORDERS", 0.5)], "one", "many",
+    "prices", COL_CX[1] + 16, 1625, "start")
 
 
 def esc(s):
@@ -221,7 +229,7 @@ def build():
   .at  {{ font-size: {FONT}px; }}
   .ty  {{ font-size: {FONT}px; fill: #5c6b7a; }}
   .ky  {{ font-size: {FONT - 4}px; font-weight: bold; text-anchor: end; fill: #8f4667; }}
-  .rl  {{ font-size: {LABEL_FONT}px; font-style: italic; fill: #6b3a2e; }}
+  .rl  {{ font-size: {LABEL_FONT}px;  fill: #6b3a2e; }}
   rect.box {{ fill: #ffffff; stroke: #3b6ea5; stroke-width: 2; }}
   rect.hdr {{ fill: #eef4fb; stroke: #3b6ea5; stroke-width: 2; }}
   line.sep {{ stroke: #cfd9e4; stroke-width: 1; }}
