@@ -17,7 +17,7 @@ HEADER_H = 48
 ROW_H = 38
 FONT = 28
 LABEL_FONT = 24
-END_GAP = 16          # distance a line stops short of the box it points at
+END_GAP = 0           # lines run right up to the entity they connect
 
 COL_CX = [255, 750, 1245]
 ROW_TOP = [70, 360, 650, 940, 1230, 1668]
@@ -139,11 +139,46 @@ def _pull(p, q, gap):
     return (p[0] + dx / d * gap, p[1] + dy / d * gap)
 
 
+# The notation has to stay readable once the figure is scaled to the width of
+# the page, so it is drawn much larger than the line weight would suggest.
+FOOT = 34      # how far the crow's foot reaches back from the entity
+BAR = 22       # how far the "one" bar sits from the entity
+SPREAD = 17    # half the width of the foot and the bar
+
+
+def _unit(a, b):
+    """Unit vector pointing from a to b, and its perpendicular."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    d = math.hypot(dx, dy) or 1.0
+    ux, uy = dx / d, dy / d
+    return (ux, uy), (-uy, ux)
+
+
+def _notation(end, inward, kind):
+    """Cardinality drawn as explicit geometry at the entity border.
+
+    Markers were placed by the renderer relative to the path direction and kept
+    landing short of the box, which left the symbol floating; drawing it here
+    puts it exactly on the border every time. `inward` is the neighbouring point
+    on the line, so the symbol is built back along the line from `end`.
+    """
+    (ux, uy), (px, py) = _unit(end, inward)
+    ex, ey = end
+    if kind == "many":
+        vx, vy = ex + ux * FOOT, ey + uy * FOOT          # where the toes meet
+        return (f"M{vx:.0f} {vy:.0f} L{ex + px * SPREAD:.0f} {ey + py * SPREAD:.0f} "
+                f"M{vx:.0f} {vy:.0f} L{ex:.0f} {ey:.0f} "
+                f"M{vx:.0f} {vy:.0f} L{ex - px * SPREAD:.0f} {ey - py * SPREAD:.0f}")
+    bx, by = ex + ux * BAR, ey + uy * BAR
+    return (f"M{bx + px * SPREAD:.0f} {by + py * SPREAD:.0f} "
+            f"L{bx - px * SPREAD:.0f} {by - py * SPREAD:.0f}")
+
+
 def rel(pts, ms, me, label, lx, ly, anchor="middle"):
     pts = list(pts)
-    pts[0] = _pull(pts[0], pts[1], END_GAP)
-    pts[-1] = _pull(pts[-1], pts[-2], END_GAP)
     d = "M" + " L".join(f"{round(x)} {round(y)}" for x, y in pts)
+    d += " " + _notation(pts[0], pts[1], ms)
+    d += " " + _notation(pts[-1], pts[-2], me)
     RELATIONS.append((d, ms, me, label, lx, ly, anchor))
 
 
@@ -244,17 +279,19 @@ def build():
 <svg width="{CANVAS_W}" height="{CANVAS_H}" viewBox="0 0 {CANVAS_W} {CANVAS_H}"
      xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="one" viewBox="0 0 26 26" refX="20" refY="13"
+    <!-- refX puts the notation itself on the entity border: the bar and the
+         three prongs touch the box, and the line runs away from it. -->
+    <marker id="one" viewBox="0 0 26 26" refX="24" refY="13"
             markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
             orient="auto-start-reverse">
-      <path d="M16 4 L16 22" stroke="#4a4a4a" stroke-width="1.8" fill="none"/>
+      <path d="M16 3 L16 23" stroke="#4a4a4a" stroke-width="2.2" fill="none"/>
     </marker>
-    <marker id="many" viewBox="0 0 26 26" refX="3" refY="13"
+    <marker id="many" viewBox="0 0 26 26" refX="22" refY="13"
             markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
             orient="auto-start-reverse">
-      <path d="M22 4 L3 13 L22 22 M3 13 L22 13"
-            stroke="#4a4a4a" stroke-width="1.6" fill="none"
-            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 13 L22 3 M3 13 L22 13 M3 13 L22 23"
+            stroke="#4a4a4a" stroke-width="2" fill="none"
+            stroke-linecap="round"/>
     </marker>
   </defs>
 ''']
@@ -277,8 +314,7 @@ def build():
                 o.append(f'  <text class="ky" x="{x + w - 14}" y="{base}">{esc(ky)}</text>')
 
     for d, ms, me, label, lx, ly, anchor in RELATIONS:
-        o.append(f'  <path class="rel" d="{d}" '
-                 f'marker-start="url(#{ms})" marker-end="url(#{me})"/>')
+        o.append(f'  <path class="rel" d="{d}"/>')
         o.append(f'  <text class="rl" x="{round(lx)}" y="{round(ly)}" '
                  f'text-anchor="{anchor}">{esc(label)}</text>')
 

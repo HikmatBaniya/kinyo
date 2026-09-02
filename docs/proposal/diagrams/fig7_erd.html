@@ -18,17 +18,19 @@
 <svg width="1500" height="1940" viewBox="0 0 1500 1940"
      xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="one" viewBox="0 0 26 26" refX="20" refY="13"
+    <!-- refX puts the notation itself on the entity border: the bar and the
+         three prongs touch the box, and the line runs away from it. -->
+    <marker id="one" viewBox="0 0 26 26" refX="24" refY="13"
             markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
             orient="auto-start-reverse">
-      <path d="M16 4 L16 22" stroke="#4a4a4a" stroke-width="1.8" fill="none"/>
+      <path d="M16 3 L16 23" stroke="#4a4a4a" stroke-width="2.2" fill="none"/>
     </marker>
-    <marker id="many" viewBox="0 0 26 26" refX="3" refY="13"
+    <marker id="many" viewBox="0 0 26 26" refX="22" refY="13"
             markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
             orient="auto-start-reverse">
-      <path d="M22 4 L3 13 L22 22 M3 13 L22 13"
-            stroke="#4a4a4a" stroke-width="1.6" fill="none"
-            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 13 L22 3 M3 13 L22 13 M3 13 L22 23"
+            stroke="#4a4a4a" stroke-width="2" fill="none"
+            stroke-linecap="round"/>
     </marker>
   </defs>
 
@@ -321,43 +323,43 @@
   <line class="sep" x1="565" y1="1830" x2="935" y2="1830"/>
   <text class="ty" x="571" y="1858">dec</text>
   <text class="at" x="659" y="1858">value</text>
-  <path class="rel" d="M466 170 L539 170" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M450 170 L555 170 M472 187 L472 153 M521 170 L555 153 M521 170 L555 170 M521 170 L555 187"/>
   <text class="rl" x="502" y="157" text-anchor="middle">holds</text>
-  <path class="rel" d="M1034 210 L961 210" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1050 210 L945 210 M1028 193 L1028 227 M979 210 L945 227 M979 210 L945 210 M979 210 L945 193"/>
   <text class="rl" x="998" y="197" text-anchor="middle">grants</text>
-  <path class="rel" d="M1167 286 L1167 306 L255 306 L255 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1167 270 L1167 306 L255 306 L255 360 M1150 292 L1184 292 M255 326 L272 360 M255 326 L255 360 M255 326 L238 360"/>
   <text class="rl" x="271" y="294" text-anchor="start">owns</text>
-  <path class="rel" d="M1245 286 L1245 306 L750 306 L750 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1245 270 L1245 306 L750 306 L750 360 M1228 292 L1262 292 M750 326 L767 360 M750 326 L750 360 M750 326 L733 360"/>
   <text class="rl" x="766" y="294" text-anchor="start">owns</text>
-  <path class="rel" d="M1323 286 L1323 344" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1323 270 L1323 360 M1306 292 L1340 292 M1323 326 L1340 360 M1323 326 L1323 360 M1323 326 L1306 360"/>
   <text class="rl" x="1339" y="294" text-anchor="start">owns</text>
-  <path class="rel" d="M1097 286 L1097 280 L502 280 L502 600 L372 600 L372 634" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1097 270 L1097 280 L502 280 L502 600 L372 600 L372 650 M1080 292 L1114 292 M372 616 L389 650 M372 616 L372 650 M372 616 L355 650"/>
   <text class="rl" x="516" y="560" text-anchor="start">owns</text>
-  <path class="rel" d="M1034 470 L961 470" marker-start="url(#many)" marker-end="url(#many)"/>
+  <path class="rel" d="M1050 470 L945 470 M1016 470 L1050 453 M1016 470 L1050 470 M1016 470 L1050 487 M979 470 L945 487 M979 470 L945 470 M979 470 L945 453"/>
   <text class="rl" x="998" y="457" text-anchor="middle">grouped in</text>
-  <path class="rel" d="M1226 576 L1226 634" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1226 560 L1226 650 M1208 582 L1242 582 M1226 616 L1242 650 M1226 616 L1226 650 M1226 616 L1208 650"/>
   <text class="rl" x="1242" y="610" text-anchor="start">sold as</text>
-  <path class="rel" d="M1226 866 L1226 924" marker-start="url(#one)" marker-end="url(#one)"/>
+  <path class="rel" d="M1226 850 L1226 940 M1208 872 L1242 872 M1242 918 L1208 918"/>
   <text class="rl" x="1242" y="900" text-anchor="start">stocked as</text>
-  <path class="rel" d="M1128 866 L1128 892 L867 892 L867 924" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1128 850 L1128 892 L867 892 L867 940 M1111 872 L1145 872 M867 906 L884 940 M867 906 L867 940 M867 906 L850 940"/>
   <text class="rl" x="1000" y="880" text-anchor="middle">chosen in</text>
-  <path class="rel" d="M1034 810 L1032 810 L1032 1182 L886 1182 L886 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M1050 810 L1032 810 L1032 1182 L886 1182 L886 1230 M1028 793 L1028 827 M886 1196 L904 1230 M886 1196 L886 1230 M886 1196 L870 1230"/>
   <text class="rl" x="990" y="1172" text-anchor="middle">sold in</text>
-  <path class="rel" d="M466 760 L539 760" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M450 760 L555 760 M472 777 L472 743 M521 760 L555 743 M521 760 L555 760 M521 760 L555 777"/>
   <text class="rl" x="502" y="747" text-anchor="middle">owns</text>
-  <path class="rel" d="M236 866 L236 924" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M236 850 L236 940 M218 872 L252 872 M236 906 L252 940 M236 906 L236 940 M236 906 L218 940"/>
   <text class="rl" x="252" y="900" text-anchor="start">saves</text>
-  <path class="rel" d="M750 828 L750 924" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M750 812 L750 940 M733 834 L767 834 M750 906 L767 940 M750 906 L750 940 M750 906 L733 940"/>
   <text class="rl" x="766" y="900" text-anchor="start">contains</text>
-  <path class="rel" d="M466 800 L472 800 L472 1186 L411 1186 L411 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M450 800 L472 800 L472 1186 L411 1186 L411 1230 M472 817 L472 783 M411 1196 L428 1230 M411 1196 L411 1230 M411 1196 L394 1230"/>
   <text class="rl" x="486" y="1000" text-anchor="start">places</text>
-  <path class="rel" d="M216 1156 L216 1214" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M216 1140 L216 1230 M199 1162 L233 1162 M216 1196 L233 1230 M216 1196 L216 1230 M216 1196 L199 1230"/>
   <text class="rl" x="232" y="1190" text-anchor="start">ships to</text>
-  <path class="rel" d="M466 1330 L539 1330" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M450 1330 L555 1330 M472 1347 L472 1313 M521 1330 L555 1313 M521 1330 L555 1330 M521 1330 L555 1347"/>
   <text class="rl" x="502" y="1317" text-anchor="middle">contains</text>
-  <path class="rel" d="M216 1652 L216 1598" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M216 1668 L216 1582 M233 1646 L199 1646 M216 1616 L199 1582 M216 1616 L216 1582 M216 1616 L233 1582"/>
   <text class="rl" x="232" y="1628" text-anchor="start">prices</text>
-  <path class="rel" d="M692 1652 L692 1624 L352 1624 L352 1598" marker-start="url(#one)" marker-end="url(#many)"/>
+  <path class="rel" d="M692 1668 L692 1624 L352 1624 L352 1582 M708 1646 L674 1646 M352 1616 L336 1582 M352 1616 L352 1582 M352 1616 L370 1582"/>
   <text class="rl" x="600" y="1612" text-anchor="middle">reduces</text>
 </svg>
 </div>
