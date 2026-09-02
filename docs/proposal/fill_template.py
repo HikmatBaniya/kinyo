@@ -488,7 +488,14 @@ def build():
     # ---- title page: fill the placeholders, keep the logo and the layout ----
     set_text(find_para(doc, "[NAME OF COLLEGE]"), m["college"], bold=True)
     set_text(find_para(doc, "[Address, City]"), m["college_address"])
-    set_text(find_para(doc, "[Place Your Project Title Here]"), m["title"], bold=True)
+    title_para = find_para(doc, "[Place Your Project Title Here]")
+    set_text(title_para, m["title"], bold=True)
+    semester = doc.add_paragraph()
+    fmt(semester, double=False, first_line=Inches(0),
+        align=WD_ALIGN_PARAGRAPH.CENTER)
+    semester.paragraph_format.line_spacing = 1.5
+    set_run(semester.add_run(m["semester_line"]))
+    title_para._element.addnext(semester._element)
     students = [p for p in all_paragraphs(doc)
                 if p.text.strip().startswith("Student Name")]
     for p, (name, roll) in zip(students, m["students"]):
@@ -657,9 +664,7 @@ def build():
             cur.numbered(i, s)
     cur = section(doc, "3.5 System Flowchart")
     cur.para(C.CH3_FLOWCHART[0])
-    cur.figure(4, note="Numbered circles are off-page connectors: control leaves a "
-                       "connector in one stage and resumes at the connector with the "
-                       "same number in another stage.")
+    cur.figure(4)
     for t in C.CH3_FLOWCHART[1:]:
         cur.para(t)
     cur = section(doc, "3.6 Use Case Diagram")
@@ -679,9 +684,7 @@ def build():
         cur.para(t)
     cur = section(doc, "3.8 Entity Relationship Diagram")
     cur.para(C.CH3_ERD[0])
-    cur.figure(8, note="Every tenant-owned entity carries tenant_id as a foreign key "
-                       "referencing TENANT. For legibility only the principal ownership "
-                       "relationships are drawn.")
+    cur.figure(8)
     for t in C.CH3_ERD[1:]:
         cur.para(t)
 
