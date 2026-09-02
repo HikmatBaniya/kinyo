@@ -576,10 +576,6 @@ def build():
     cur.para("The specific objectives of the project are the following.")
     for i, t in enumerate(C.CH1_SPECIFIC_OBJECTIVES, 1):
         cur.numbered(i, t)
-    cur.para("The third objective is measurable and verifiable: the modules named are "
-             "either present or absent, and the 40 test cases described in Section 4.3 "
-             "either pass or fail. No performance improvement is claimed, because no "
-             "baseline has been measured.")
     cur = section(doc, "1.4 Project Scope")
     cur.para(C.CH1_SCOPE_INTRO)
     for lead, text in C.CH1_SCOPE_ITEMS:

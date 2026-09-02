@@ -184,9 +184,6 @@ CH1_SPECIFIC_OBJECTIVES = [
     "catalogue management, storefront presentation and order handling.",
     "To design a multi-tenant data model and a three-tier architecture that isolates "
     "every tenant-owned record and resolves each storefront from its host name.",
-    "To implement the store provisioning, catalogue, cart and order modules, and to "
-    "verify them against 40 defined test cases covering functional behaviour and "
-    "tenant isolation.",
     "To deploy the platform as a web application that serves seller dashboards and "
     "customer storefronts over subdomain and custom-domain addresses.",
 ]

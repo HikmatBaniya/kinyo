@@ -73,7 +73,18 @@ def patch(path):
             changes.append(f"rewrote objective {idx}")
             break
 
-    # 3. drop the explanatory notes under figures
+    # 3. remove any objective beyond the list, and the sentence about it
+    extra = len(C.CH1_SPECIFIC_OBJECTIVES) + 1
+    for para in list(doc.paragraphs):
+        body = para.text.strip()
+        if body.startswith(f"{extra}.") and body[len(str(extra)) + 1:].lstrip().startswith("To "):
+            para._element.getparent().remove(para._element)
+            changes.append(f"removed objective {extra}")
+        elif body.startswith("The third objective is measurable"):
+            para._element.getparent().remove(para._element)
+            changes.append("removed the sentence about the third objective")
+
+    # 4. drop the explanatory notes under figures
     removed = 0
     for p in list(doc.paragraphs):
         if p.text.strip().startswith("Note."):
