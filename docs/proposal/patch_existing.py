@@ -57,7 +57,23 @@ def patch(path):
         title._element.addnext(new._element)
         changes.append(f"added {line!r} under the title")
 
-    # 2. drop the explanatory notes under figures
+    # 2. rewrite the specific objectives, which read as a task list
+    for idx, wanted in enumerate(C.CH1_SPECIFIC_OBJECTIVES, 1):
+        prefix = f"{idx}."
+        for para in doc.paragraphs:
+            body = para.text.strip()
+            if not body.startswith(prefix):
+                continue
+            rest = body[len(prefix):].lstrip()
+            if not rest.startswith("To ") or rest == wanted:
+                continue
+            for r in list(para.runs):
+                r._element.getparent().remove(r._element)
+            style_run(para.add_run(f"{prefix}\t{wanted}"))
+            changes.append(f"rewrote objective {idx}")
+            break
+
+    # 3. drop the explanatory notes under figures
     removed = 0
     for p in list(doc.paragraphs):
         if p.text.strip().startswith("Note."):

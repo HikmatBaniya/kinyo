@@ -182,11 +182,11 @@ CH1_GENERAL_OBJECTIVE = (
 CH1_SPECIFIC_OBJECTIVES = [
     "To analyse the requirements of independent sellers and their customers for online "
     "catalogue management, storefront presentation and order handling.",
-    "To design a shared-database multi-tenant data model and a three-tier system "
-    "architecture in which every tenant-owned record is isolated by a tenant identifier.",
-    "To implement the store provisioning, catalogue, cart and order modules, including "
-    "host-based storefront routing, and to verify them against 40 defined test cases "
-    "covering functional behaviour and cross-tenant data isolation.",
+    "To design a multi-tenant data model and a three-tier architecture that isolates "
+    "every tenant-owned record and resolves each storefront from its host name.",
+    "To implement the store provisioning, catalogue, cart and order modules, and to "
+    "verify them against 40 defined test cases covering functional behaviour and "
+    "tenant isolation.",
     "To deploy the platform as a web application that serves seller dashboards and "
     "customer storefronts over subdomain and custom-domain addresses.",
 ]
