@@ -16,7 +16,6 @@ META = {
         ("Hikmat Baniya", "15"),
         ("Nishan Neupane", "23"),
     ],
-    "supervisor": "[Supervisor Name]",
     "city": "Kathmandu",
     "month_year": "September, 2026",
     "repo_backend": "https://github.com/HikmatBaniya/kinyo",

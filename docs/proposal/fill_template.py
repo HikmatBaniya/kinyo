@@ -475,7 +475,10 @@ def build():
         set_text(p, f"{name} [{roll}]")
     for leftover in students[len(m["students"]):]:
         leftover._element.getparent().remove(leftover._element)
-    set_text(find_para(doc, "[Supervisor Name]"), m["supervisor"])
+    # supervisor block dropped from the title page at the authors' request
+    for prefix in ("[Supervisor Name]", "Under the Supervision of"):
+        para_el = find_para(doc, prefix)._element
+        para_el.getparent().remove(para_el)
     set_text(find_para(doc, "[City], Nepal"), f'{m["city"]}, Nepal')
     set_text(find_para(doc, "[Month], [Year]"), m["month_year"])
 
