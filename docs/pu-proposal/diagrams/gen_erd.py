@@ -168,6 +168,22 @@ def _cardinality(end, inward, text):
     CARDS.append((text, x, y))
 
 
+ARROW_LEN = 26     # length of the arrow head
+ARROW_W = 10       # half the width of its base
+
+ARROWS = []        # filled triangles, drawn last so they sit on the line
+
+
+def _arrow(end, inward):
+    """A solid head at the entity on the many side, pointing into it."""
+    (ux, uy), (px, py) = _unit(end, inward)      # (ux, uy) points away from the box
+    bx, by = end[0] + ux * ARROW_LEN, end[1] + uy * ARROW_LEN
+    ARROWS.append(
+        f"{end[0]:.0f},{end[1]:.0f} "
+        f"{bx + px * ARROW_W:.0f},{by + py * ARROW_W:.0f} "
+        f"{bx - px * ARROW_W:.0f},{by - py * ARROW_W:.0f}")
+
+
 def rel(pts, ms, me, label, lx, ly, anchor="middle"):
     pts = list(pts)
     d = "M" + " L".join(f"{round(x)} {round(y)}" for x, y in pts)
@@ -175,6 +191,10 @@ def rel(pts, ms, me, label, lx, ly, anchor="middle"):
     first, second = ("M", "N") if ms == "many" and me == "many" else ("1", "N")
     _cardinality(pts[0], pts[1], first if ms == "many" else "1")
     _cardinality(pts[-1], pts[-2], second if me == "many" else "1")
+    if ms == "many":
+        _arrow(pts[0], pts[1])
+    if me == "many":
+        _arrow(pts[-1], pts[-2])
 
 
 def hrel(a, b, y, ms, me, label, side="right"):
@@ -312,6 +332,9 @@ def build():
         o.append(f'  <path class="rel" d="{d}"/>')
         o.append(f'  <text class="rl" x="{round(lx)}" y="{round(ly)}" '
                  f'text-anchor="{anchor}">{esc(label)}</text>')
+
+    for pts in ARROWS:
+        o.append(f'  <polygon class="ar" points="{pts}"/>')
 
     for text, x, y in CARDS:
         o.append(f'  <text class="cd" x="{round(x)}" y="{round(y)}">{esc(text)}</text>')
