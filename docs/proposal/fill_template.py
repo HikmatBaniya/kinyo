@@ -43,6 +43,8 @@ PAGE_INDEX = (json.loads(_INDEX.read_text(encoding="utf-8"))
 
 FONT = "Times New Roman"
 SIZE = Pt(12)
+HEADING_SIZES = {"Heading 1": Pt(16), "Heading 2": Pt(14),
+                 "Heading 3": Pt(14)}
 INDENT = Inches(0)     # the report is set without first-line indents
 
 
@@ -339,9 +341,16 @@ def set_text(paragraph, text, *, bold=None, italic=False, size=SIZE):
 def add_page_numbering(doc):
     """Top-right page numbers, roman for front matter, arabic from Chapter 1."""
     def header_number(section, show=True):
+        # the number sits centred in the footer; any header is left empty
         section.header.is_linked_to_previous = False
-        p = section.header.paragraphs[0]
-        fmt(p, double=False, first_line=Inches(0), align=WD_ALIGN_PARAGRAPH.RIGHT)
+        hp = section.header.paragraphs[0]
+        fmt(hp, double=False, first_line=Inches(0))
+        for r in list(hp.runs):
+            r._element.getparent().remove(r._element)
+
+        section.footer.is_linked_to_previous = False
+        p = section.footer.paragraphs[0]
+        fmt(p, double=False, first_line=Inches(0), align=WD_ALIGN_PARAGRAPH.CENTER)
         for r in list(p.runs):
             r._element.getparent().remove(r._element)
         if show:
@@ -437,6 +446,20 @@ def normalise_type(doc):
                     rpr.append(rf)
                 for a in ("w:ascii", "w:hAnsi", "w:cs", "w:eastAsia"):
                     rf.set(qn(a), FONT)
+
+    for name, size in HEADING_SIZES.items():
+        doc.styles[name].font.size = size
+
+    def resize_headings(paragraphs):
+        for para in paragraphs:
+            size = HEADING_SIZES.get(para.style.name)
+            if size is None:
+                continue
+            for r in para.runs:
+                r.font.size = size
+                r.bold = True
+
+    resize_headings(doc.paragraphs)
 
     strip(doc.paragraphs)
     for table in doc.tables:

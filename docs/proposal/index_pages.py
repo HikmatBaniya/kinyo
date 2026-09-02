@@ -25,14 +25,14 @@ CAPTION = re.compile(r"^(Figure|Table)\s+(\d+)$")
 
 
 def printed_number(page):
-    """The page number shown in the top-right header, as written."""
-    top = page.rect.height * 0.09
-    words = [w for w in page.get_text("words") if w[3] < top]
-    if not words:
-        return None
-    words.sort(key=lambda w: -w[0])
-    token = words[0][4].strip()
-    return token if re.fullmatch(r"[ivxlcdm]+|\d+", token, re.I) else None
+    """The page number as written in the running footer."""
+    floor = page.rect.height * 0.88
+    words = [w for w in page.get_text("words") if w[1] > floor]
+    for w in words:
+        token = w[4].strip()
+        if re.fullmatch(r"[ivxlcdm]+|\d+", token, re.I):
+            return token
+    return None
 
 
 def main():
