@@ -48,7 +48,7 @@ def build():
   text {{ font-family: "Times New Roman", Georgia, serif; fill: #12263a; }}
   .nd {{ font-size: {FONT}px; text-anchor: middle; }}
   .it {{ font-size: {FONT_TITLE}px; font-weight: bold; fill: #12263a; }}
-  .fb {{ font-size: {FONT - 2}px; font-style: italic; fill: #6b3a2e; }}
+  .fb {{ font-size: {FONT - 2}px;  fill: #6b3a2e; }}
   rect.ph {{ fill: #eef4fb; stroke: #3b6ea5; stroke-width: 1.8; }}
   rect.tm {{ fill: #f6f2e8; stroke: #8a7333; stroke-width: 2; }}
   rect.band {{ fill: none; stroke: #c9d4e0; stroke-width: 1.4; stroke-dasharray: 7 5; }}

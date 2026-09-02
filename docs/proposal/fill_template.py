@@ -144,33 +144,30 @@ class Cursor:
         title, filename, width_in = C.FIGURES[number]
         if filename is None:            # placeholder for a figure supplied later
             p = self.doc.add_paragraph()
-            fmt(p, first_line=Inches(0), keep_next=True)
-            set_run(p.add_run(f"Figure {number}"), bold=True)
-            self._attach(p._element)
-            p = self.doc.add_paragraph()
-            fmt(p, first_line=Inches(0), keep_next=True)
-            set_run(p.add_run(title))
+            fmt(p, double=False, first_line=Inches(0),
+                align=WD_ALIGN_PARAGRAPH.CENTER, keep_next=True)
+            set_run(p.add_run("[ Insert Gantt chart here ]"))
             self._attach(p._element)
             p = self.doc.add_paragraph()
             fmt(p, double=False, first_line=Inches(0),
-                align=WD_ALIGN_PARAGRAPH.CENTER)
-            set_run(p.add_run("[ Insert Gantt chart here ]"))
+                align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
+            set_run(p.add_run(f"Figure {number} "), bold=True)
+            set_run(p.add_run(title))
             self._attach(p._element)
             self.blank()
             return
         p = self.doc.add_paragraph()
-        fmt(p, first_line=Inches(0), keep_next=True)
-        set_run(p.add_run(f"Figure {number}"), bold=True)
-        self._attach(p._element)
-
-        p = self.doc.add_paragraph()
-        fmt(p, first_line=Inches(0), keep_next=True)
-        set_run(p.add_run(title))
-        self._attach(p._element)
-
-        p = self.doc.add_paragraph()
-        fmt(p, double=False, first_line=Inches(0))
+        fmt(p, double=False, first_line=Inches(0),
+            align=WD_ALIGN_PARAGRAPH.CENTER, keep_next=True)
         p.add_run().add_picture(str(FIG_DIR / filename), width=Inches(width_in))
+        self._attach(p._element)
+
+        # caption beneath the figure, number and title on one line
+        p = self.doc.add_paragraph()
+        fmt(p, double=False, first_line=Inches(0),
+            align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
+        set_run(p.add_run(f"Figure {number} "), bold=True)
+        set_run(p.add_run(title))
         self._attach(p._element)
 
         if note:

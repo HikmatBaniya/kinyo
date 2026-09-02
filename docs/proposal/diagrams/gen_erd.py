@@ -221,7 +221,7 @@ def build():
   .at  {{ font-size: {FONT}px; }}
   .ty  {{ font-size: {FONT}px; fill: #5c6b7a; }}
   .ky  {{ font-size: {FONT - 4}px; font-weight: bold; text-anchor: end; fill: #8f4667; }}
-  .rl  {{ font-size: {LABEL_FONT}px; font-style: italic; fill: #6b3a2e; }}
+  .rl  {{ font-size: {LABEL_FONT}px;  fill: #6b3a2e; }}
   rect.box {{ fill: #ffffff; stroke: #3b6ea5; stroke-width: 2; }}
   rect.hdr {{ fill: #eef4fb; stroke: #3b6ea5; stroke-width: 2; }}
   line.sep {{ stroke: #cfd9e4; stroke-width: 1; }}
@@ -231,14 +231,17 @@ def build():
 <svg width="{CANVAS_W}" height="{CANVAS_H}" viewBox="0 0 {CANVAS_W} {CANVAS_H}"
      xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="one" viewBox="0 0 20 20" refX="15" refY="10"
-            markerWidth="16" markerHeight="16" orient="auto">
-      <path d="M12 2 L12 18" stroke="#4a4a4a" stroke-width="2.2" fill="none"/>
+    <marker id="one" viewBox="0 0 26 26" refX="20" refY="13"
+            markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
+            orient="auto-start-reverse">
+      <path d="M16 4 L16 22" stroke="#4a4a4a" stroke-width="1.8" fill="none"/>
     </marker>
-    <marker id="many" viewBox="0 0 20 20" refX="4" refY="10"
-            markerWidth="16" markerHeight="16" orient="auto">
-      <path d="M17 2 L4 10 L17 18 M4 10 L17 10"
-            stroke="#4a4a4a" stroke-width="1.9" fill="none"/>
+    <marker id="many" viewBox="0 0 26 26" refX="3" refY="13"
+            markerWidth="26" markerHeight="26" markerUnits="userSpaceOnUse"
+            orient="auto-start-reverse">
+      <path d="M22 4 L3 13 L22 22 M3 13 L22 13"
+            stroke="#4a4a4a" stroke-width="1.6" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
     </marker>
   </defs>
 ''']
