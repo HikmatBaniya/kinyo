@@ -141,9 +141,10 @@ def _pull(p, q, gap):
 
 # The notation has to stay readable once the figure is scaled to the width of
 # the page, so it is drawn much larger than the line weight would suggest.
-FOOT = 34      # how far the crow's foot reaches back from the entity
-BAR = 22       # how far the "one" bar sits from the entity
-SPREAD = 17    # half the width of the foot and the bar
+CARD_BACK = 26     # how far along the line the cardinality sits
+CARD_SIDE = 19     # how far to the side of the line it sits
+
+CARDS = []         # (text, x, y) drawn after the lines
 
 
 def _unit(a, b):
@@ -154,32 +155,26 @@ def _unit(a, b):
     return (ux, uy), (-uy, ux)
 
 
-def _notation(end, inward, kind):
-    """Cardinality drawn as explicit geometry at the entity border.
+def _cardinality(end, inward, text):
+    """Place a 1 or N beside the line, just clear of the entity it belongs to.
 
-    Markers were placed by the renderer relative to the path direction and kept
-    landing short of the box, which left the symbol floating; drawing it here
-    puts it exactly on the border every time. `inward` is the neighbouring point
-    on the line, so the symbol is built back along the line from `end`.
+    The offset is forced below a horizontal line and to the right of a vertical
+    one, so it never lands on the relationship name, which sits above and left.
     """
-    (ux, uy), (px, py) = _unit(end, inward)
-    ex, ey = end
-    if kind == "many":
-        vx, vy = ex + ux * FOOT, ey + uy * FOOT          # where the toes meet
-        return (f"M{vx:.0f} {vy:.0f} L{ex + px * SPREAD:.0f} {ey + py * SPREAD:.0f} "
-                f"M{vx:.0f} {vy:.0f} L{ex:.0f} {ey:.0f} "
-                f"M{vx:.0f} {vy:.0f} L{ex - px * SPREAD:.0f} {ey - py * SPREAD:.0f}")
-    bx, by = ex + ux * BAR, ey + uy * BAR
-    return (f"M{bx + px * SPREAD:.0f} {by + py * SPREAD:.0f} "
-            f"L{bx - px * SPREAD:.0f} {by - py * SPREAD:.0f}")
+    (ux, uy), _perp = _unit(end, inward)
+    px, py = (0.0, 1.0) if abs(ux) > abs(uy) else (1.0, 0.0)
+    x = end[0] + ux * CARD_BACK + px * CARD_SIDE
+    y = end[1] + uy * CARD_BACK + py * CARD_SIDE
+    CARDS.append((text, x, y))
 
 
 def rel(pts, ms, me, label, lx, ly, anchor="middle"):
     pts = list(pts)
     d = "M" + " L".join(f"{round(x)} {round(y)}" for x, y in pts)
-    d += " " + _notation(pts[0], pts[1], ms)
-    d += " " + _notation(pts[-1], pts[-2], me)
     RELATIONS.append((d, ms, me, label, lx, ly, anchor))
+    first, second = ("M", "N") if ms == "many" and me == "many" else ("1", "N")
+    _cardinality(pts[0], pts[1], first if ms == "many" else "1")
+    _cardinality(pts[-1], pts[-2], second if me == "many" else "1")
 
 
 def hrel(a, b, y, ms, me, label, side="right"):
@@ -207,7 +202,7 @@ rel([B("TENANT", 0.5), (B("TENANT", 0.5)[0], BUS),
      (T("COLLECTION", 0.5)[0], BUS), T("COLLECTION", 0.5)],
     "one", "many", "owns", T("COLLECTION", 0.5)[0] + 16, BUS - 12, "start")
 rel([B("TENANT", 0.7), T("PRODUCT", 0.7)], "one", "many",
-    "owns", T("PRODUCT", 0.7)[0] + 16, BUS - 12, "start")
+    "owns", T("PRODUCT", 0.7)[0] + 46, BUS - 12, "start")
 
 # the fourth owned entity sits a row lower; the drop stays inside the figure
 X_CUST = vchan(0)
@@ -248,7 +243,7 @@ rel([B("ADDRESS", 0.4), T("ORDERS", 0.4)], "one", "many",
 hrel("ORDERS", "ORDER_ITEM", 1330, "one", "many", "contains")
 
 rel([T("SHIPPING_ZONE", 0.4), B("ORDERS", 0.4)], "one", "many",
-    "prices", T("SHIPPING_ZONE", 0.4)[0] + 16, 1628, "start")
+    "prices", T("SHIPPING_ZONE", 0.4)[0] + 46, 1628, "start")
 rel([T("DISCOUNT", 0.35), (T("DISCOUNT", 0.35)[0], 1624),
      (B("ORDERS", 0.75)[0], 1624), B("ORDERS", 0.75)],
     "one", "many", "reduces", 600, 1612)
@@ -317,6 +312,9 @@ def build():
         o.append(f'  <path class="rel" d="{d}"/>')
         o.append(f'  <text class="rl" x="{round(lx)}" y="{round(ly)}" '
                  f'text-anchor="{anchor}">{esc(label)}</text>')
+
+    for text, x, y in CARDS:
+        o.append(f'  <text class="cd" x="{round(x)}" y="{round(y)}">{esc(text)}</text>')
 
     o.append('</svg>\n</div>\n')
     return "\n".join(o)
