@@ -519,16 +519,17 @@ def build():
                for n in sorted(C.FIGURES)],
               [0.8, 4.6, 0.8], number=None, title=None, caption=False)
 
-    cur = section(doc, "List of Tables")
     if C.TABLE_TITLES:
+        cur = section(doc, "List of Tables")
         cur.table(["Table", "Title", "Page"],
                   [[str(n), C.TABLE_TITLES[n], PAGE_INDEX["tables"].get(str(n), "")]
                    for n in sorted(C.TABLE_TITLES)],
                   [0.8, 4.6, 0.8], number=None, title=None, caption=False)
     else:
-        cur.para("The report presents its comparative and requirement "
-                 "information in the text rather than in numbered tables, so no "
-                 "table list is required.")
+        # nothing is numbered as a table, so the section is dropped entirely
+        heading = find_para(doc, "List of Tables")
+        clear_until_next_heading(doc, heading._element)
+        heading._element.getparent().remove(heading._element)
 
     cur = section(doc, "List of Abbreviations")
     cur.table(["Abbreviation", "Expansion"], [[a, e] for a, e in C.ABBREVIATIONS],
