@@ -23,13 +23,9 @@ HERE = Path(__file__).parent
 PDF = HERE.parent / "Kinyo_ProjectVI_Proposal.pdf"
 OUT = HERE / "page_index.json"
 
-# A caption is the figure number followed by its exact title. Matching on the
-# number alone also catches body sentences such as "Figure 7 decomposes ...".
-CAPTIONS = {f"Figure {n} {title}": ("figures", str(n))
-            for n, (title, _f, _w) in C.FIGURES.items()}
-CAPTIONS.update({f"Table {n} {title}": ("tables", str(n))
-                 for n, title in C.TABLE_TITLES.items()})
-
+# With the number on its own line above the figure, a caption is a line that is
+# exactly "Figure N" or "Table N"; body prose never takes that form.
+CAPTION = re.compile(r"^(Figure|Table)\s+(\d+)$")
 
 def printed_number(page):
     """The page number as written in the running header."""
@@ -50,10 +46,10 @@ def main():
         if shown is None:
             continue
         for line in page.get_text().splitlines():
-            hit = CAPTIONS.get(line.strip())
-            if hit:
-                bucket, number = hit
-                index[bucket].setdefault(number, shown)
+            m = CAPTION.match(line.strip())
+            if m:
+                bucket = "figures" if m.group(1) == "Figure" else "tables"
+                index[bucket].setdefault(m.group(2), shown)
 
     OUT.write_text(json.dumps(index, indent=2), encoding="utf-8")
     print(f"wrote {OUT}")
